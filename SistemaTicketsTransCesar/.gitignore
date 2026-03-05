@@ -1,0 +1,39 @@
+# === JAVA & COMPILACIÓN ===
+*.class
+*.log
+*.jar
+*.war
+*.ear
+bin/
+build/
+target/
+out/
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# BlueJ files
+*.ctxt
+
+# === INTELLIJ IDEA ===
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# === VISUAL STUDIO CODE ===
+.vscode/
+
+# === NETBEANS ===
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+build/
+
+# === ARCHIVOS DE SISTEMA ===
+.DS_Store
+Thumbs.db
+desktop.ini

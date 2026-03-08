@@ -40,6 +40,15 @@ public class Conductor extends Persona {
     public void setCategoriaLicencia(String categoriaLicencia) {
         this.categoriaLicencia = categoriaLicencia;
     }
+
+    public void imprimirDetalle() {
+        System.out.println("----- CONDUCTOR -----");
+        System.out.println("Cedula: " + id);
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Apellido: " + apellido);
+        System.out.println("Numero Licencia: " + numeroLicencia);
+        System.out.println("Categoria Licencia: " + categoriaLicencia);
+    }
     
     
 }

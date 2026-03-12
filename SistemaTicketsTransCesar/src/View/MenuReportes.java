@@ -2,6 +2,7 @@ package View;
 import java.util.List;
 import java.util.Scanner;
 import Service.ReporteService;
+import Util.MenuUtil;
 
 /*en esta clase se va a gestionar los reportes de las ventas como: la suma de todos los tickets vendidos
 * y cuanto dinero generaron los vehiculos.

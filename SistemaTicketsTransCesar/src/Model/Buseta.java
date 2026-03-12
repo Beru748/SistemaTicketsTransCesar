@@ -3,7 +3,7 @@ package Model;
 public class Buseta extends vehiculo{
 
     public Buseta(String placa, String modelo, int capacidadMaxima, int pasajerosActuales, double precioBaseTicket) {
-        super(placa, modelo, 12, pasajerosActuales, 4500);
+        super(placa, modelo, 20, pasajerosActuales, 4500);
     }
     
     @Override

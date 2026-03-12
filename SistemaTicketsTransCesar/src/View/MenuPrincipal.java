@@ -1,5 +1,6 @@
 package View;
 import java.util.Scanner;
+import Util.MenuUtil;
 
 public class MenuPrincipal {
     private Scanner sc;

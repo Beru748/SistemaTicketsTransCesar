@@ -3,6 +3,7 @@ import java.util.Scanner;
 import java.util.List;
 import Service.VehiculoService;
 import Model.Vehiculos;
+import Util.MenuUtil;
 
 /*en esta clase se va a gestionar todos los tipos de vehiculos de la empresa.
 * dejo el menu para que vean mas o menos cuales son las opciones que van a tener y se hagan

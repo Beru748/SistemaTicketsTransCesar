@@ -46,4 +46,21 @@ public class VehiculoService {
             return "Vehiculo lleno. No hay cupos";
         }
     }
+
+    //Metodo para archivar el vehiculo po la placa
+
+    public String archivarVehiculo(String placa){
+        Vehiculo v = vehiculosDAO.buscarPorPlaca(placa);
+
+        if(v == null){
+            return "La placa del vehiculo no fue encontrada. No se pudo archivar.";
+        }
+
+        if(!v.isActivo()){
+            return "El vehiculo ya se encuentra ARCHIVADO.";
+        }
+
+        vehiculosDAO.archivarVehiculo(placa);
+        return "El vehiculo con la placa: " + placa + " ha sido ARCHIVADO EXITOSAMENTE." ;
+    }
 }

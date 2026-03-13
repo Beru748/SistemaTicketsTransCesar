@@ -1,0 +1,23 @@
+package Service;
+import java.util.List;
+import Model.Vehiculo;
+import DAO.VehiculosDAO;
+
+public class VehiculoService {
+    private VehiculosDAO vehiculosDAO;
+
+    public VehiculoService() {
+        this.vehiculosDAO = new VehiculosDAO();
+    }
+
+    //Metodo para registrar el vehiculo solo si la plca no esta repetida
+
+    public String registarVehiculo(Vehiculo v){
+        if(vehiculosDAO.buscarPorPlaca(v.getPlaca()) != null){
+            return "Error: ya existe un vehiculo con la placa " + v.getPlaca();
+        }
+        boolean guardado = vehiculosDAO.guardarVehiculo(v);
+        return guardado ? "Vehiculo guardado exitosamente." : "Hubo un error al guardar el vehiculo.";
+    }
+
+}

@@ -108,4 +108,17 @@ public class VehiculosDAO {
         }
         return lista;
     }
+
+    //Metodo para buscar por placa
+
+    public Vehiculo buscarPorPlaca(String placa){
+        List<Vehiculo> todos = listarVehiculos();
+
+        for (Vehiculo vehiculo : todos) {
+            if(vehiculo.getPlaca().equalsIgnoreCase(placa)){
+                return vehiculo;
+            }
+        }
+        return null;
+    }
 }

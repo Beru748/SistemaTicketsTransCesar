@@ -1,26 +1,14 @@
 
-import modelo.Persona;
+package Model;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
-/**
- *
- * @author COMPUMAX
- */
 public class Conductor extends Persona {
+
     private String numeroLicencia;
     private String categoriaLicencia;
 
-    public Conductor(String numeroLicencia, String categoriaLicencia) {
-        this.numeroLicencia = numeroLicencia;
-        this.categoriaLicencia = categoriaLicencia;
-    }
-
-    public Conductor(String numeroLicencia, String categoriaLicencia, String id, String nombre, String apellido) {
-        super(id, nombre, apellido);
+    public Conductor(String numeroLicencia, String categoriaLicencia, String cedula, String nombre) {
+        super(cedula, nombre);
         this.numeroLicencia = numeroLicencia;
         this.categoriaLicencia = categoriaLicencia;
     }
@@ -40,15 +28,19 @@ public class Conductor extends Persona {
     public void setCategoriaLicencia(String categoriaLicencia) {
         this.categoriaLicencia = categoriaLicencia;
     }
-
-    public void Imprimible() {
-        System.out.println("----- CONDUCTOR -----");
-        System.out.println("Cedula: " + id);
-        System.out.println("Nombre: " + nombre);
-        System.out.println("Apellido: " + apellido);
-        System.out.println("Numero Licencia: " + numeroLicencia);
-        System.out.println("Categoria Licencia: " + categoriaLicencia);
+    
+    public boolean tieneLicencia() {
+        return numeroLicencia != null && !numeroLicencia.trim().isEmpty();
     }
     
-    
+    @Override
+    public void imprimirDetalle() {
+        System.out.println("========== CONDUCTOR ==========");
+        System.out.println("Cédula          : " + cedula);
+        System.out.println("Nombre          : " + nombre);
+        System.out.println("N° Licencia     : " + (tieneLicencia() ? numeroLicencia : "Sin licencia registrada"));
+        System.out.println("Categoría       : " + (categoriaLicencia != null ? categoriaLicencia : "N/A"));
+        System.out.println("================================");
+    }
+
 }

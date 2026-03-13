@@ -11,7 +11,10 @@ public class PasajeroRegular extends Pasajero {
         return 0.0;
     }
 
-    
+    @Override
+    public String getTipoPasajero() {
+        return "regular";
+    }
 
     @Override
     public void imprimirDetalle() {

@@ -12,17 +12,22 @@ import java.util.List;
 public class VehiculosDAO {
 
     //investigue y creo que es mejor hacer una sola clase donde se guarde cualquier tipo de vehiculo
-    public boolean guardarVehiculo(Vehiculo vehiculo){
-        String rutaArchivo = "";
 
+    private String determinarRuta(Vehiculo v){
         //Devuelve true si el objeto es de la clase especificada o una subclase (ej. perro instanceof Animal es true)
-        if (vehiculo instanceof Bus){
-            rutaArchivo = RutasArchivos.BUS;
-        }else if(vehiculo instanceof Buseta){
-            rutaArchivo = RutasArchivos.BUSETA;
-        }else if(vehiculo instanceof Microbus){
-            rutaArchivo = RutasArchivos.MICROBUS;
-        }else{
+        if (v instanceof Bus){
+            return RutasArchivos.BUS;
+        }else if(v instanceof Buseta){
+            return RutasArchivos.BUSETA;
+        }else if(v instanceof Microbus){
+            return RutasArchivos.MICROBUS;
+        }
+        return null;
+    }
+    public boolean guardarVehiculo(Vehiculo vehiculo){
+        String rutaArchivo = determinarRuta(vehiculo);
+
+        if(rutaArchivo == null){
             System.out.println("Error: Vehiculo desconocido.");
             return false;
         }
@@ -66,7 +71,7 @@ public class VehiculosDAO {
                 while ((linea = br.readLine()) != null) {
                     if(linea.trim().isEmpty()) continue;
 
-                    String[] datos = linea.split("\\|");
+                    String[] datos = linea.split("\\s*\\|\\s*");
 
                 if (datos.length >= 9) {
                     //posiblemente te preguntes donde estan los demas datos faltantes pero, la cose es que
@@ -107,5 +112,56 @@ public class VehiculosDAO {
             }
         }
         return lista;
+    }
+
+    //Metodo para buscar por placa
+
+    public Vehiculo buscarPorPlaca(String placa){
+        List<Vehiculo> todos = listarVehiculos();
+
+        for (Vehiculo vehiculo : todos) {
+            if(vehiculo.getPlaca().equalsIgnoreCase(placa)){
+                return vehiculo;
+            }
+        }
+        return null;
+    }
+
+    //Metodo para archivar el vehiculo osea cambiar su estado a no disponible
+
+    public void archivarVehiculo(String placa) {
+
+        Vehiculo v = buscarPorPlaca(placa);
+        if (v == null) {
+            System.out.println("Error: Vehículo no encontrado.");
+            return;
+        }
+
+        String ruta = determinarRuta(v);
+        List<String> lineasActualizadas = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split("\\s*\\|\\s*");
+
+                if (datos.length >= 10 && datos[2].equalsIgnoreCase(placa)) {
+                    datos[7] = "No disponible";
+                    linea = String.join(" | ", datos);
+                }
+                lineasActualizadas.add(linea);
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer: " + e.getMessage());
+        }
+
+        try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
+            for (String l : lineasActualizadas) {
+                pw.println(l);
+            }
+            System.out.println("Vehículo " + placa + " archivado exitosamente.");
+        } catch (IOException e) {
+            System.out.println("Error al escribir: " + e.getMessage());
+        }
     }
 }

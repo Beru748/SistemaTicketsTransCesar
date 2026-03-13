@@ -32,4 +32,15 @@ public class Conductor extends Persona {
     public boolean tieneLicencia() {
         return numeroLicencia != null && !numeroLicencia.trim().isEmpty();
     }
+    
+    @Override
+    public void imprimirDetalle() {
+        System.out.println("========== CONDUCTOR ==========");
+        System.out.println("Cédula          : " + cedula);
+        System.out.println("Nombre          : " + nombre);
+        System.out.println("N° Licencia     : " + (tieneLicencia() ? numeroLicencia : "Sin licencia registrada"));
+        System.out.println("Categoría       : " + (categoriaLicencia != null ? categoriaLicencia : "N/A"));
+        System.out.println("================================");
+    }
+
 }

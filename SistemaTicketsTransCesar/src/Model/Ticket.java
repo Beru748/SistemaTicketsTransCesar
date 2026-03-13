@@ -51,4 +51,41 @@ private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPatte
         System.out.printf ("Valor     : $%.0f%n", valorFinal);
         System.out.println("============================");
     }
+    
+    @Override
+    public String toString() {
+        return pasajero.getCedula() + ";"
+             + pasajero.getNombre() + ";"
+             + pasajero.getTipoPasajero() + ";"
+             + vehiculo.getPlaca() + ";"
+             + fechaCompra.format(FORMATO_FECHA) + ";"
+             + origen + ";"
+             + destino + ";"
+             + String.format("%.0f", valorFinal);
+    }
+
+    public Pasajero getPasajero() {
+        return pasajero;
+    }
+
+    public Vehiculo getVehiculo() {
+        return vehiculo;
+    }
+
+    public LocalDate getFechaCompra() {
+        return fechaCompra;
+    }
+
+    public String getOrigen() {
+        return origen;
+    }
+
+    public String getDestino() {
+        return destino;
+    }
+
+    public double getValorFinal() {
+        return valorFinal;
+    }
+
 }

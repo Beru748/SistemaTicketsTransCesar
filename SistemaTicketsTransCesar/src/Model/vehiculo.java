@@ -2,19 +2,13 @@ package Model;
 
 public abstract class Vehiculo implements Imprimible,Calculable{
     
-    protected String placa;
-    protected String modelo;
-    protected int capacidadMaxima;
-    protected int pasajerosActuales;
+    protected String placa, modelo, tipoVehiculo, idConductor, origen, destino;
+    protected int capacidadMaxima, pasajerosActuales;
     protected double precioBaseTicket;
-    protected String tipoVehiculo;
-    protected boolean estado;      
-    protected String idConductor;  
-    protected String origen;
-    protected String destino;
+    protected boolean estado;
 
-    public Vehiculo(String placa, String modelo, int capacidadMaxima,int pasajerosActuales ,double precioBaseTicket,
-            String tipoVehiculo, boolean estado, String idConductor, String origen, String destino) {
+    public Vehiculo(String placa, String modelo, int capacidadMaxima, double precioBaseTicket,
+                    String tipoVehiculo, boolean estado, String idConductor, String origen, String destino) {
         this.placa = placa;
         this.modelo = modelo;
         this.capacidadMaxima = capacidadMaxima;

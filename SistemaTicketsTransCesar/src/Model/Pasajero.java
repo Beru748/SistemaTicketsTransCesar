@@ -8,4 +8,5 @@ public abstract class Pasajero extends Persona{
     }
     
     public abstract double calcularDescuento();
+    public abstract String getTipoPasajero();
 }

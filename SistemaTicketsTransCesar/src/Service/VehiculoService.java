@@ -25,4 +25,25 @@ public class VehiculoService {
     public List<Vehiculo> listarTodo(){
         return vehiculosDAO.listarVehiculos();
     }
+
+    //Metodo para consultar su disponibilidad o buscar por placa
+
+    public String consultarDisponibilidad(String placa){
+        Vehiculo v = vehiculosDAO.buscarPorPlaca(placa);
+
+        if(v == null){
+            return "Vehiculo encontrado.";
+        }
+
+        if(!v.isActivo()){
+            return "El vehiculo se encuentra ARCHIVADO (No disponible)";
+        }
+
+        if(v.tieneCupo()){
+            int cuposLibre = v.getCapacidadMaxima() - v.getPasajerosActuales();
+            return "Disponible, cupos libres: " + cuposLibre;
+        }else{
+            return "Vehiculo lleno. No hay cupos";
+        }
+    }
 }

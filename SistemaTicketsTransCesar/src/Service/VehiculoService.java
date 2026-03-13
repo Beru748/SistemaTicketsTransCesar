@@ -20,4 +20,9 @@ public class VehiculoService {
         return guardado ? "Vehiculo guardado exitosamente." : "Hubo un error al guardar el vehiculo.";
     }
 
+    //Metodo para mostrar todos los vehiculos tanto los activos como los inactivos
+
+    public List<Vehiculo> listarTodo(){
+        return vehiculosDAO.listarVehiculos();
+    }
 }

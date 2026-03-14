@@ -141,6 +141,18 @@ public class MenuVehiculos {
         System.out.println("Total de vehiculos registrados: " + lista.size());
     }
 
+    //Metodo para consultar la disponibilidad del vehiculo
+
+    private void consultarDisponibilidadVehiculo() {
+        System.out.println("\n=== CONSULTAR DISPONIBILIDAD ===");
+        System.out.print("Ingrese la placa del vehiculo a consultar: ");
+        String placa = sc.nextLine().trim().toUpperCase();
+
+        String resultado = vehiculoService.consultarDisponibilidad(placa);
+        System.out.println("\n" + resultado);
+    }
+
+
 }
 
 

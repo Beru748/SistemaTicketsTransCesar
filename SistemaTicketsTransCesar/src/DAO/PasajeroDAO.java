@@ -2,6 +2,7 @@ package DAO;
 
 import Model.Pasajero;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +25,11 @@ public class PasajeroDAO {
     
     public List<Pasajero> cargarTodos() {
         List<Pasajero> lista = new ArrayList<>();
+        File archivo = new File(RUTA_ARCHIVO);
+
+        if (!archivo.exists()) {
+            return lista;
+        }
         return null;
         
 }

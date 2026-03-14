@@ -26,6 +26,7 @@ public class MenuPersonal {
     public void menuPersonal(){
         int opcion;
 
+    do {
         System.out.println("====================================================");
         System.out.println("| |             GESTION DEL PERSONAL             | |");
         System.out.println("====================================================");
@@ -39,7 +40,6 @@ public class MenuPersonal {
         opcion = sc.nextInt();
         sc.nextLine();
 
-        do {
             switch (opcion) {
                 case 1:
                     //Registrar conductor

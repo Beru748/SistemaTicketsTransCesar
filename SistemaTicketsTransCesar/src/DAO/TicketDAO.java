@@ -1,9 +1,13 @@
 package DAO;
 
+import Model.Pasajero;
 import Model.Ticket;
+import Model.Vehiculo;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TicketDAO {
     private static final String RUTA_ARCHIVO = "tickets.txt";
@@ -14,5 +18,11 @@ public class TicketDAO {
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo guardar el ticket: " + e.getMessage());
         }
+    }
+    
+    public List<Ticket> cargarTodos(List<Pasajero> pasajeros, List<Vehiculo> vehiculos) {
+        List<Ticket> lista = new ArrayList<>();
+        return null;
+        
     }
 }

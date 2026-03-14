@@ -113,6 +113,34 @@ public class MenuVehiculos {
         String mensaje = vehiculoService.registarVehiculo(vehiculoNuevo);
         System.out.println("\n" + mensaje);
     }
+
+    //Metodo para mostrar la lista de los vehiculos 
+
+    private void mostrarListadoVehiculos(){
+        System.out.println("\n=== LISTADO DETALLADO DE VEHICULOS ===");
+        List<Vehiculo> lista = vehiculoService.listarTodo();
+
+        if (lista.isEmpty()) {
+            System.out.println("No hay vehiculos registrados en el sistema.");
+            return;
+        }
+
+        // Formato tipo tabla simple para mejor legibilidad en consola
+        System.out.printf("%-10s | %-10s | %-8s | %-12s | %-15s | %-10s\n", 
+                        "TIPO", "PLACA", "MODELO", "CONDUCTOR", "RUTA (Ori-Des)", "ESTADO");
+        System.out.println("====================================================================================");
+        
+        for (Vehiculo v : lista) {
+            String ruta = v.getOrigen() + " - " + v.getDestino();
+            String estadoStr = v.isActivo() ? "ACTIVO" : "ARCHIVADO";
+            
+            System.out.printf("%-10s | %-10s | %-8s | %-12s | %-15s | %-10s\n", 
+                    v.getTipoVehiculo(), v.getPlaca(), v.getModelo(), v.getIdConductor(), ruta, estadoStr);
+        }
+        System.out.println("====================================================================================");
+        System.out.println("Total de vehiculos registrados: " + lista.size());
+    }
+
 }
 
 

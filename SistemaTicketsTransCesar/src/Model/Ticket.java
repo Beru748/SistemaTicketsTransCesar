@@ -3,6 +3,7 @@ package Model;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+
 public class Ticket implements Imprimible, Calculable {
 private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
@@ -12,27 +13,46 @@ private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPatte
     private String origen;
     private String destino;
     private double valorFinal;
-    private EstadoTicket estado;
+    private String estado;
 
     public Ticket(Pasajero pasajero, Vehiculo vehiculo, String origen, String destino) {
-        this.pasajero = pasajero;
-        this.vehiculo = vehiculo;
-        this.fechaCompra = LocalDate.now();
-        this.origen = origen;
-        this.destino = destino;
-        this.valorFinal = vehiculo.getTarifaBase() * (1 - pasajero.calcularDescuento());
-        this.estado      = EstadoTicket.PAGADO;
-    }
+    this.pasajero    = pasajero;
+    this.vehiculo    = vehiculo;
+    this.fechaCompra = LocalDate.now();
+    this.origen      = origen;
+    this.destino     = destino;
+    this.valorFinal  = vehiculo.getTarifaBase() * (1 - pasajero.calcularDescuento());
+    this.estado      = "PAGADO"; 
+}
 
-    public Ticket(Pasajero pasajero, Vehiculo vehiculo, LocalDate fechaCompra, String origen, String destino, double valorFinal, EstadoTicket estado) {
-        this.pasajero = pasajero;
-        this.vehiculo = vehiculo;
-        this.fechaCompra = fechaCompra;
-        this.origen = origen;
-        this.destino = destino;
-        this.valorFinal  = valorFinal;
-        this.estado      = estado;
+// Constructor para cargar desde archivo
+public Ticket(Pasajero pasajero, Vehiculo vehiculo, LocalDate fechaCompra,
+              String origen, String destino, double valorFinal, String estado) {
+    this.pasajero    = pasajero;
+    this.vehiculo    = vehiculo;
+    this.fechaCompra = fechaCompra;
+    this.origen      = origen;
+    this.destino     = destino;
+    this.valorFinal  = valorFinal;
+    this.estado      = estado;
+}
+
+// Método para cambiar estado con validación
+public boolean cambiarEstado(String nuevoEstado) {
+    if (this.estado.equals("ANULADO")) {
+        System.out.println("[ERROR] El ticket ya está ANULADO y no puede modificarse.");
+        return false;
     }
+    // Valida que el nuevo estado sea uno de los permitidos
+    if (!nuevoEstado.equals("PAGADO") && !nuevoEstado.equals("CANCELADO")
+            && !nuevoEstado.equals("ANULADO") && !nuevoEstado.equals("PENDIENTE")) {
+        System.out.println("[ERROR] Estado inválido. Use: PAGADO, CANCELADO, ANULADO o PENDIENTE.");
+        return false;
+    }
+    this.estado = nuevoEstado;
+    System.out.println("[OK] Estado actualizado a: " + nuevoEstado);
+    return true;
+}
 
     
 @Override
@@ -42,19 +62,7 @@ private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPatte
         return tarifaBase * (1 - descuento);
     }
     
-    public boolean cambiarEstado(EstadoTicket nuevoEstado) {
-        if (this.estado == EstadoTicket.ANULADO) {
-            System.out.println("[ERROR] El ticket ya está ANULADO y no puede modificarse.");
-            return false;
-        }
-        this.estado = nuevoEstado;
-        System.out.println("[OK] Estado del ticket actualizado a: " + nuevoEstado);
-        return true;
-    }
- 
-    public EstadoTicket getEstado() {
-        return estado;
-    }
+    
     
     @Override
     public void imprimirDetalle() {
@@ -80,8 +88,8 @@ private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPatte
              + fechaCompra.format(FORMATO_FECHA) + ";"
              + origen + ";"
              + destino + ";"
-             + String.format("%.0f", valorFinal)
-             + estado.name();
+             + String.format("%.0f", valorFinal) + ";"
+             + estado;
     }
 
     public Pasajero getPasajero() {
@@ -107,5 +115,9 @@ private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPatte
     public double getValorFinal() {
         return valorFinal;
     }
+    
+    public String getEstado() {
+    return estado;
+}
 
 }

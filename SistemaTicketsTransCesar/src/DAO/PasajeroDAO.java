@@ -1,8 +1,10 @@
 package DAO;
 
 import Model.Pasajero;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +32,28 @@ public class PasajeroDAO {
         if (!archivo.exists()) {
             return lista;
         }
-        return null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                linea = linea.trim();
+                if (!linea.isEmpty()) {
+                    String[] campos = linea.split(";");
+                    if (campos.length == 3) {
+                        String cedula = campos[0];
+                        String nombre = campos[1];
+                        String tipo   = campos[2];
+
+                        
+
+                        
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("[ERROR] No se pudo leer pasajeros.txt: " + e.getMessage());
+        }
+
+        return lista;
         
 }
 }

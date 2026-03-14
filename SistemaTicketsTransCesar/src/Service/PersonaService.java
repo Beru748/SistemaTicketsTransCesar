@@ -12,4 +12,12 @@ public class PersonaService {
 
     private List<Conductor> conductores;
     private List<Pasajero>  pasajeros;
+    
+    public PersonaService() {
+        this.conductorDAO = new ConductorDao();
+        this.pasajeroDAO  = new PasajeroDao();
+        // Carga automática al iniciar: sesiones anteriores disponibles desde el primer momento
+        this.conductores  = conductorDAO.cargarTodos();
+        this.pasajeros    = pasajeroDAO.cargarTodos();
+    }
 }

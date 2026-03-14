@@ -152,6 +152,24 @@ public class MenuVehiculos {
         System.out.println("\n" + resultado);
     }
 
+    //Metodo para archivar el vehiculo
+    
+    private void archivarVehiculo(){
+        System.out.println("\n=== ARCHIVAR VEHICULO ==");
+        System.out.println("Nota: Un vehículo archivado no estara disponible para nuevas asignaciones.");
+        System.out.print("Ingrese la placa del vehiculo a archivar: ");
+        String placa = sc.nextLine().trim().toUpperCase();
+
+        System.out.print("¿Está seguro de que desea archivar el vehiculo " + placa + "? (S/N): ");
+        String confirmacion = sc.nextLine().trim().toUpperCase();
+
+        if (confirmacion.equals("S")) {
+            String resultado = vehiculoService.archivarVehiculo(placa);
+            System.out.println("\n" + resultado);
+        } else {
+            System.out.println("Operacion cancelada.");
+        }
+    }
 
 }
 

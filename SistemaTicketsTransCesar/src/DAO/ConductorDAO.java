@@ -1,8 +1,10 @@
 package DAO;
 
 import Model.Conductor;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +29,23 @@ public class ConductorDAO {
         if (!archivo.exists()) {
             return lista;
         }
-        return null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                linea = linea.trim();
+                if (!linea.isEmpty()) {
+                    String[] campos = linea.split(";");
+                    if (campos.length == 4) {
+                        Conductor c = new Conductor(campos[2], campos[3], campos[0], campos[1]);
+                        lista.add(c);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("[ERROR] No se pudo leer conductores.txt: " + e.getMessage());
+        }
+
+        return lista;
         
     }
 }

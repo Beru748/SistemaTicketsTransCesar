@@ -131,9 +131,8 @@ public class VehiculosDAO {
                 while ((linea = br.readLine()) != null) {
                     String[] datos = linea.split("\\s*\\|\\s*");
 
-                    // La placa es el índice 2 y el estado es el 8 (debe ser un boolean "false")
                     if (datos.length >= 9 && datos[2].equalsIgnoreCase(placa)) {
-                        datos[8] = "false"; // Cambiamos el estado a false
+                        datos[8] = "No disponible";
                         linea = String.join(" | ", datos);
                     }
                     lineasActualizadas.add(linea);

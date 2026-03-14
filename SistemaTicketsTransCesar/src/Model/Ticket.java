@@ -12,26 +12,30 @@ private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPatte
     private String origen;
     private String destino;
     private double valorFinal;
+    private EstadoTicket estado;
 
     public Ticket(Pasajero pasajero, Vehiculo vehiculo, String origen, String destino) {
-        this.pasajero = pasajero;
-        this.vehiculo = vehiculo;
-        this.fechaCompra = fechaCompra;
-        this.origen = origen;
-        this.destino = destino;
-        this.valorFinal = valorFinal;
-    }
-
-    public Ticket(Pasajero pasajero, Vehiculo vehiculo, LocalDate fechaCompra, String origen, String destino, double valorFinal) {
         this.pasajero = pasajero;
         this.vehiculo = vehiculo;
         this.fechaCompra = LocalDate.now();
         this.origen = origen;
         this.destino = destino;
-        this.valorFinal = calcularTotal();
+        this.valorFinal = vehiculo.getTarifaBase() * (1 - pasajero.calcularDescuento());
+        this.estado      = EstadoTicket.PAGADO;
+    }
+
+    public Ticket(Pasajero pasajero, Vehiculo vehiculo, LocalDate fechaCompra, String origen, String destino, double valorFinal, EstadoTicket estado) {
+        this.pasajero = pasajero;
+        this.vehiculo = vehiculo;
+        this.fechaCompra = fechaCompra;
+        this.origen = origen;
+        this.destino = destino;
+        this.valorFinal  = valorFinal;
+        this.estado      = estado;
     }
 
     
+@Override
     public double calcularTotal() {
         double tarifaBase = vehiculo.getTarifaBase();
         double descuento  = pasajero.calcularDescuento();

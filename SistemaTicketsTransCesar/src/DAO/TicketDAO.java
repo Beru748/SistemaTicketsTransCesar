@@ -61,7 +61,21 @@ public class TicketDAO {
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo leer tickets.txt: " + e.getMessage());
         }
-        return null;
+        return lista;
+    
         
     }
+    private Pasajero buscarPasajeroPorCedula(List<Pasajero> lista, String cedula) {
+        for (Pasajero p : lista) {
+            if (p.getCedula().equals(cedula)) return p;
+        }
+        return null;
+    }
+
+    private Vehiculo buscarVehiculoPorPlaca(List<Vehiculo> lista, String placa) {
+        for (Vehiculo v : lista) {
+            if (v.getPlaca().equalsIgnoreCase(placa)) return v;
+        }
+        return null;
+}
 }

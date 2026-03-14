@@ -1,6 +1,9 @@
 package DAO;
 
 import Model.Pasajero;
+import Model.PasajeroAdultoMayor;
+import Model.PasajeroEstudiante;
+import Model.PasajeroRegular;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,7 +46,13 @@ public class PasajeroDAO {
                         String nombre = campos[1];
                         String tipo   = campos[2];
 
-                        
+                        Pasajero p = switch (tipo) {
+                            case "Estudiante"  -> new PasajeroEstudiante(cedula, nombre);
+                            case "AdultoMayor" -> new PasajeroAdultoMayor(cedula, nombre);
+                            default            -> new PasajeroRegular(cedula, nombre);
+                        };
+
+                        lista.add(p);
 
                         
                     }

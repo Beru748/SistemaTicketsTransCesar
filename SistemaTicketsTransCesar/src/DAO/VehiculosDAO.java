@@ -43,9 +43,8 @@ public class VehiculosDAO {
                 vehiculo.getCapacidadMaxima() + " | " +
                 vehiculo.getPasajerosActuales() + " | " +
                 vehiculo.getPrecioBaseTicket() + " | " +
-                vehiculo.isActivo() + " | " +
-                vehiculo.getOrigen() + " | " +
-                vehiculo.getDestino();
+                vehiculo.getRutaAsignada().getCodigoRuta() + " | " +
+                vehiculo.isActivo();
             
                 salida.println(linea);
                 return true;
@@ -69,21 +68,20 @@ public class VehiculosDAO {
                     if (linea.trim().isEmpty()) continue;
                     String[] datos = linea.split("\\s*\\|\\s*");
 
-                    if (datos.length >= 10) {
+                    if (datos.length >= 9) {
                         String tipo = datos[0];
                         String modelo = datos[1];
                         String placa = datos[2];
                         String idConductor = datos[3];
                         boolean estado = Boolean.parseBoolean(datos[7]);
-                        String origen = datos[8];
-                        String destino = datos[9];
+                        String rutaAsignada = datos[8];
 
                         Vehiculo v = null;
                         
                         switch (tipo.toUpperCase()) {
-                            case "BUS": v = new Bus(placa, modelo, estado, idConductor, origen, destino); break;
-                            case "BUSETA": v = new Buseta(placa, modelo, estado, idConductor, origen, destino); break;
-                            case "MICROBUS": v = new Microbus(placa, modelo, estado, idConductor, origen, destino); break;
+                            case "BUS": v = new Bus(placa, modelo, true, idConductor, rutaAsignada); break;
+                            case "BUSETA": v = new Buseta(placa, modelo, estado, idConductor, rutaAsignada); break;
+                            case "MICROBUS": v = new Microbus(placa, modelo, estado, idConductor, rutaAsignada); break;
                         }
                         if (v != null) lista.add(v);
                     }

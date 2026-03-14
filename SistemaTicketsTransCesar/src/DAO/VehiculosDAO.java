@@ -58,57 +58,38 @@ public class VehiculosDAO {
 
     //metodo para listar todos los vehiculos en el menu
 
-    public List<Vehiculo> listarVehiculos(){
-        List <Vehiculo> lista = new ArrayList<>();
-
+    public List<Vehiculo> listarVehiculos() {
+        List<Vehiculo> lista = new ArrayList<>();
         String[] rutas = { RutasArchivos.BUS, RutasArchivos.BUSETA, RutasArchivos.MICROBUS };
 
         for (String ruta : rutas) {
-            try (BufferedReader br = new BufferedReader(new FileReader(ruta))){
-            
+            try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
                 String linea;
-
                 while ((linea = br.readLine()) != null) {
-                    if(linea.trim().isEmpty()) continue;
-
+                    if (linea.trim().isEmpty()) continue;
                     String[] datos = linea.split("\\s*\\|\\s*");
 
-                if (datos.length >= 9) {
-                    //posiblemente te preguntes donde estan los demas datos faltantes pero, la cose es que
-                    //como ya estan en el constructor definidas no es necesario ponerlas al leerlas
+                    if (datos.length >= 10) {
+                        String tipo = datos[0];
+                        String modelo = datos[1];
+                        String placa = datos[2];
+                        String idConductor = datos[3];
+                        boolean estado = Boolean.parseBoolean(datos[7]);
+                        String origen = datos[8];
+                        String destino = datos[9];
 
-                    String tipo = datos[0]; // tipoVehiculo
-                    String modelo = datos[1]; // modelo
-                    String placa = datos[2]; // placa
-                    String idConductor = datos[3]; // idConductor
-                    // datos[4] es capacidadMaxima
-                    // datos[5] es pasajerosActuales   a estas me refiero
-                    // datos[6] es precioBaseTicket
-                    boolean estado = Boolean.parseBoolean(datos[7]); // isActivo
-                    String origen = datos[8]; // origen
-                    String destino = datos[9]; // destino
-
-                    Vehiculo v = null;
-
-                    switch (tipo.toUpperCase()) {
-                        case "BUS":
-                            v = new Bus(placa, modelo, estado, idConductor, origen, destino);
-                            break;
-                        case "BUSETA":
-                            v = new Buseta(placa, modelo, estado, idConductor, origen, destino);
-                            break;
-                        case "MICROBUS":
-                            v = new Microbus(placa, modelo, estado, idConductor, origen, destino);
-                            break;
-                    }
-
-                    if (v != null) {
-                        lista.add(v);
+                        Vehiculo v = null;
+                        
+                        switch (tipo.toUpperCase()) {
+                            case "BUS": v = new Bus(placa, modelo, estado, idConductor, origen, destino); break;
+                            case "BUSETA": v = new Buseta(placa, modelo, estado, idConductor, origen, destino); break;
+                            case "MICROBUS": v = new Microbus(placa, modelo, estado, idConductor, origen, destino); break;
+                        }
+                        if (v != null) lista.add(v);
                     }
                 }
-            }
             } catch (IOException e) {
-                System.out.println("Error en listar los vehiculos: " + e.getMessage());
+                System.out.println("Error al leer: " + e.getMessage());
             }
         }
         return lista;

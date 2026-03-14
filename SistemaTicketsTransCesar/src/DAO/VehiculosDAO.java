@@ -10,6 +10,7 @@ import java.util.List;
 
 
 public class VehiculosDAO {
+    private DAO.RutasDAO rutasDAO = new DAO.RutasDAO();
 
     //investigue y creo que es mejor hacer una sola clase donde se guarde cualquier tipo de vehiculo
 
@@ -73,15 +74,22 @@ public class VehiculosDAO {
                         String modelo = datos[1];
                         String placa = datos[2];
                         String idConductor = datos[3];
-                        boolean estado = Boolean.parseBoolean(datos[7]);
-                        String rutaAsignada = datos[8];
+                        String codigoRuta = datos[7];
+                        boolean estado = Boolean.parseBoolean(datos[8]);
+
+                        Model.Ruta rutaObjeto = rutasDAO.buscarPorCodigo(codigoRuta);
+                        
+                        // esto resguarda de posibles errores si la ruta fue borrada
+                        if (rutaObjeto == null) {
+                            rutaObjeto = new Model.Ruta(codigoRuta, "Desconocido", "Desconocido", 0, 0);
+                        }
 
                         Vehiculo v = null;
                         
                         switch (tipo.toUpperCase()) {
-                            case "BUS": v = new Bus(placa, modelo, true, idConductor, rutaAsignada); break;
-                            case "BUSETA": v = new Buseta(placa, modelo, estado, idConductor, rutaAsignada); break;
-                            case "MICROBUS": v = new Microbus(placa, modelo, estado, idConductor, rutaAsignada); break;
+                            case "BUS": v = new Bus(placa, modelo, estado, idConductor, rutaObjeto); break;
+                            case "BUSETA": v = new Buseta(placa, modelo, estado, idConductor, rutaObjeto); break;
+                            case "MICROBUS": v = new Microbus(placa, modelo, estado, idConductor, rutaObjeto); break;
                         }
                         if (v != null) lista.add(v);
                     }
@@ -109,38 +117,29 @@ public class VehiculosDAO {
     //Metodo para archivar el vehiculo osea cambiar su estado a no disponible
 
     public void archivarVehiculo(String placa) {
-
         Vehiculo v = buscarPorPlaca(placa);
-        if (v == null) {
-            System.out.println("Error: Vehículo no encontrado.");
-            return;
-        }
+            if (v == null) {
+                System.out.println("Error: Vehículo no encontrado.");
+                return;
+            }
 
-        String ruta = determinarRuta(v);
-        List<String> lineasActualizadas = new ArrayList<>();
+            String ruta = determinarRuta(v);
+            List<String> lineasActualizadas = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split("\\s*\\|\\s*");
+            try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+                String linea;
+                while ((linea = br.readLine()) != null) {
+                    String[] datos = linea.split("\\s*\\|\\s*");
 
-                if (datos.length >= 10 && datos[2].equalsIgnoreCase(placa)) {
-                    datos[7] = "No disponible";
-                    linea = String.join(" | ", datos);
+                    // La placa es el índice 2 y el estado es el 8 (debe ser un boolean "false")
+                    if (datos.length >= 9 && datos[2].equalsIgnoreCase(placa)) {
+                        datos[8] = "false"; // Cambiamos el estado a false
+                        linea = String.join(" | ", datos);
+                    }
+                    lineasActualizadas.add(linea);
                 }
-                lineasActualizadas.add(linea);
-            }
-        } catch (IOException e) {
-            System.out.println("Error al leer: " + e.getMessage());
-        }
-
-        try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
-            for (String l : lineasActualizadas) {
-                pw.println(l);
-            }
-            System.out.println("Vehículo " + placa + " archivado exitosamente.");
-        } catch (IOException e) {
-            System.out.println("Error al escribir: " + e.getMessage());
-        }
+            } catch (IOException e) {
+                System.out.println("Error al leer: " + e.getMessage());
+            }  
     }
 }

@@ -34,4 +34,17 @@ public class PersonaService {
         System.out.println("[OK] Conductor registrado: " + nombre);
         return true;
     }
+    
+    public boolean conductorTieneLicencia(String cedula) {
+        Conductor c = buscarConductorPorCedula(cedula);
+        if (c == null) {
+            System.out.println("[ERROR] No existe un conductor con cédula: " + cedula);
+            return false;
+        }
+        if (!c.tieneLicencia()) {
+            System.out.println("[ERROR] El conductor " + c.getNombre() + " no tiene licencia registrada.");
+            return false;
+        }
+        return true;
+    }
 }

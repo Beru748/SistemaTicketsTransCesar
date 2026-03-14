@@ -4,6 +4,8 @@ import DAO.TicketDao;
 import Model.Pasajero;
 import Model.Ticket;
 import Model.Vehiculo;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,14 +13,27 @@ import java.util.Map;
 public class TicketService {
     private final TicketDao ticketDAO;
     private List<Ticket> tickets;
-    
+
     public TicketService(List<Pasajero> pasajeros, List<Vehiculo> vehiculos) {
         this.ticketDAO = new TicketDao();
         // Carga automática al iniciar: sesiones anteriores disponibles desde el primer momento
         this.tickets = ticketDAO.cargarTodos(pasajeros, vehiculos);
     }
-    
-    
+
+    // ─────────────────────── VENTA ───────────────────────
+
+    /**
+     * Vende un ticket para un pasajero en un vehículo dado.
+     *
+     * REGLAS DE NEGOCIO aplicadas aquí (capa service, no en ninguna otra):
+     *   1. El vehículo debe tener cupos disponibles.
+     *   2. El valor final se calcula usando polimorfismo: pasajero.calcularDescuento()
+     * @param pasajero
+     * @param vehiculo
+     * @param origen
+     * @param destino
+     * @return 
+     */
     public boolean venderTicket(Pasajero pasajero, Vehiculo vehiculo,
                                  String origen, String destino) {
 
@@ -43,7 +58,12 @@ public class TicketService {
         ticket.imprimirDetalle();
         return true;
     }
-    
+
+    // ─────────────────────── CONSULTAS Y ESTADÍSTICAS ───────────────────────
+
+    /**
+     * Lista todos los tickets vendidos con su información completa.
+     */
     public void listarTickets() {
         if (tickets.isEmpty()) {
             System.out.println("No hay tickets registrados.");
@@ -54,7 +74,11 @@ public class TicketService {
             t.imprimirDetalle();
         }
     }
-    
+
+    /**
+     * Calcula el total de dinero recaudado en todas las ventas.
+     * @return 
+     */
     public double calcularTotalRecaudado() {
         double total = 0;
         for (Ticket t : tickets) {
@@ -62,7 +86,10 @@ public class TicketService {
         }
         return total;
     }
-    
+
+    /**
+     * Muestra cuántos pasajeros de cada tipo han comprado tickets.
+     */
     public void mostrarEstadisticasPorTipo() {
         Map<String, Integer> conteo = new HashMap<>();
         conteo.put("Regular",     0);
@@ -81,7 +108,9 @@ public class TicketService {
         System.out.println("==============================");
     }
 
-    
+    /**
+     * Identifica cuál es el vehículo con más tickets vendidos.
+     */
     public void mostrarVehiculoMasTickets() {
         if (tickets.isEmpty()) {
             System.out.println("No hay tickets registrados.");
@@ -108,9 +137,8 @@ public class TicketService {
         System.out.println("Tickets : " + maxTickets);
         System.out.println("=====================================");
     }
-    
+
     public List<Ticket> getTickets() {
         return tickets;
     }
-
 }

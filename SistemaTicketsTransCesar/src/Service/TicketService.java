@@ -52,5 +52,13 @@ public class TicketService {
             t.imprimirDetalle();
         }
     }
+    
+    public double calcularTotalRecaudado() {
+        double total = 0;
+        for (Ticket t : tickets) {
+            total += t.getValorFinal();
+        }
+        return total;
+    }
 
 }

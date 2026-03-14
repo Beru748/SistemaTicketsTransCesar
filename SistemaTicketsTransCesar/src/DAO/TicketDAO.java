@@ -4,6 +4,7 @@ import Model.Pasajero;
 import Model.Ticket;
 import Model.Vehiculo;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +23,11 @@ public class TicketDAO {
     
     public List<Ticket> cargarTodos(List<Pasajero> pasajeros, List<Vehiculo> vehiculos) {
         List<Ticket> lista = new ArrayList<>();
+        File archivo = new File(RUTA_ARCHIVO);
+
+        if (!archivo.exists()) {
+            return lista;
+        }
         return null;
         
     }

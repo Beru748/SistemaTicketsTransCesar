@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConductorDAO {
-    private static final String RUTA_ARCHIVO = "conductores.txt";
+    private static final String RUTA_ARCHIVO = "Data/Conductores.txt";
     
     public void guardar(Conductor conductor) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(RUTA_ARCHIVO, true))) {

@@ -2,13 +2,14 @@ package Model;
 
 public abstract class Vehiculo implements Imprimible,Calculable{
     
-    protected String placa, modelo, tipoVehiculo, idConductor, origen, destino;
+    protected String placa, modelo, tipoVehiculo, idConductor;
     protected int capacidadMaxima, pasajerosActuales;
     protected double precioBaseTicket;
     protected boolean estado;
+    protected Ruta rutaAsignada;
 
     public Vehiculo(String placa, String modelo, int capacidadMaxima, double precioBaseTicket,
-                    String tipoVehiculo, boolean estado, String idConductor, String origen, String destino) {
+                    String tipoVehiculo, boolean estado, String idConductor, Ruta rutaAsignada) {
         this.placa = placa;
         this.modelo = modelo;
         this.capacidadMaxima = capacidadMaxima;
@@ -17,8 +18,7 @@ public abstract class Vehiculo implements Imprimible,Calculable{
         this.tipoVehiculo = tipoVehiculo;
         this.estado = estado;
         this.idConductor = idConductor;
-        this.origen = origen;
-        this.destino = destino;
+        this.rutaAsignada = rutaAsignada;
     }
 
     public String getPlaca() {
@@ -85,20 +85,12 @@ public abstract class Vehiculo implements Imprimible,Calculable{
         this.idConductor = idConductor;
     }
 
-    public String getOrigen() {
-        return origen;
+    public Ruta getRutaAsignada() {
+        return rutaAsignada;
     }
 
-    public void setOrigen(String origen) {
-        this.origen = origen;
-    }
-
-    public String getDestino() {
-        return destino;
-    }
-
-    public void setDestino(String destino) {
-        this.destino = destino;
+    public void setRutaAsignada(Ruta rutaAsignada) {
+        this.rutaAsignada = rutaAsignada;
     }
 
     //Este metodo lo puede usar david a la hora de vender un ticket
@@ -123,8 +115,8 @@ public abstract class Vehiculo implements Imprimible,Calculable{
     public String toString() {
         return "vehiculo [placa=" + placa + ", modelo=" + modelo + ", capacidadMaxima=" + capacidadMaxima
                 + ", pasajerosActuales=" + pasajerosActuales + ", precioBaseTicket=" + precioBaseTicket
-                + ", tipoVehiculo=" + tipoVehiculo + ", estado=" + estado + ", idConductor=" + idConductor + ", origen="
-                + origen + ", destino=" + destino + "]";
+                + ", tipoVehiculo=" + tipoVehiculo + ", estado=" + estado + ", idConductor=" + idConductor 
+                + ", ruta=" + rutaAsignada.toString() + "]";
     }
 
     

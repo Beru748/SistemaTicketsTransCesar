@@ -4,6 +4,8 @@ import Model.Pasajero;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PasajeroDAO {
     private static final String RUTA_ARCHIVO = "pasajeros.txt";
@@ -15,5 +17,14 @@ public class PasajeroDAO {
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo guardar el pasajero: " + e.getMessage());
         }
+        
+        
+        
     }
+    
+    public List<Pasajero> cargarTodos() {
+        List<Pasajero> lista = new ArrayList<>();
+        return null;
+        
+}
 }

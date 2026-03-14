@@ -82,4 +82,15 @@ public class PersonaService {
         System.out.println("[OK] Pasajero registrado: " + nombre + " (" + tipo + ")");
         return true;
     }
+    
+    public Pasajero buscarPasajeroPorCedula(String cedula) {
+        for (Pasajero p : pasajeros) {
+            if (p.getCedula().equals(cedula)) return p;
+        }
+        return null;
+    }
+
+    public List<Pasajero> listarPasajeros() {
+        return pasajeros;
+    }
 }

@@ -42,6 +42,20 @@ private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPatte
         return tarifaBase * (1 - descuento);
     }
     
+    public boolean cambiarEstado(EstadoTicket nuevoEstado) {
+        if (this.estado == EstadoTicket.ANULADO) {
+            System.out.println("[ERROR] El ticket ya está ANULADO y no puede modificarse.");
+            return false;
+        }
+        this.estado = nuevoEstado;
+        System.out.println("[OK] Estado del ticket actualizado a: " + nuevoEstado);
+        return true;
+    }
+ 
+    public EstadoTicket getEstado() {
+        return estado;
+    }
+    
     @Override
     public void imprimirDetalle() {
         System.out.println("========== TICKET ==========");
@@ -53,6 +67,7 @@ private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPatte
         System.out.println("Fecha     : " + fechaCompra.format(FORMATO_FECHA));
         System.out.printf ("Descuento : %.0f%%%n", pasajero.calcularDescuento() * 100);
         System.out.printf ("Valor     : $%.0f%n", valorFinal);
+        System.out.println("Estado    : " + estado);
         System.out.println("============================");
     }
     
@@ -65,7 +80,8 @@ private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPatte
              + fechaCompra.format(FORMATO_FECHA) + ";"
              + origen + ";"
              + destino + ";"
-             + String.format("%.0f", valorFinal);
+             + String.format("%.0f", valorFinal)
+             + estado.name();
     }
 
     public Pasajero getPasajero() {

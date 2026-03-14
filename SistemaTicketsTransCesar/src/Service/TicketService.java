@@ -4,7 +4,9 @@ import DAO.TicketDao;
 import Model.Pasajero;
 import Model.Ticket;
 import Model.Vehiculo;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TicketService {
     private final TicketDao ticketDAO;
@@ -59,6 +61,52 @@ public class TicketService {
             total += t.getValorFinal();
         }
         return total;
+    }
+    
+    public void mostrarEstadisticasPorTipo() {
+        Map<String, Integer> conteo = new HashMap<>();
+        conteo.put("Regular",     0);
+        conteo.put("Estudiante",  0);
+        conteo.put("AdultoMayor", 0);
+
+        for (Ticket t : tickets) {
+            String tipo = t.getPasajero().getTipoPasajero();
+            conteo.put(tipo, conteo.getOrDefault(tipo, 0) + 1);
+        }
+
+        System.out.println("===== PASAJEROS POR TIPO =====");
+        System.out.println("Regular     : " + conteo.get("Regular"));
+        System.out.println("Estudiante  : " + conteo.get("Estudiante"));
+        System.out.println("Adulto Mayor: " + conteo.get("AdultoMayor"));
+        System.out.println("==============================");
+    }
+
+    
+    public void mostrarVehiculoMasTickets() {
+        if (tickets.isEmpty()) {
+            System.out.println("No hay tickets registrados.");
+            return;
+        }
+
+        Map<String, Integer> conteo = new HashMap<>();
+        for (Ticket t : tickets) {
+            String placa = t.getVehiculo().getPlaca();
+            conteo.put(placa, conteo.getOrDefault(placa, 0) + 1);
+        }
+
+        String placaGanadora = null;
+        int maxTickets = 0;
+        for (Map.Entry<String, Integer> entry : conteo.entrySet()) {
+            if (entry.getValue() > maxTickets) {
+                maxTickets    = entry.getValue();
+                placaGanadora = entry.getKey();
+            }
+        }
+
+        System.out.println("===== VEHÍCULO CON MÁS TICKETS =====");
+        System.out.println("Placa   : " + placaGanadora);
+        System.out.println("Tickets : " + maxTickets);
+        System.out.println("=====================================");
     }
 
 }

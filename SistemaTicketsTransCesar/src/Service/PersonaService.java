@@ -47,4 +47,15 @@ public class PersonaService {
         }
         return true;
     }
+    
+    public Conductor buscarConductorPorCedula(String cedula) {
+        for (Conductor c : conductores) {
+            if (c.getCedula().equals(cedula)) return c;
+        }
+        return null;
+    }
+
+    public List<Conductor> listarConductores() {
+        return conductores;
+    }
 }

@@ -108,5 +108,9 @@ public class TicketService {
         System.out.println("Tickets : " + maxTickets);
         System.out.println("=====================================");
     }
+    
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
 
 }

@@ -15,6 +15,7 @@ import Util.MenuUtil;
 public class MenuVehiculos {
     private Scanner sc;
     private VehiculoService vehiculoService;
+    private DAO.RutasDAO rutasDAO = new DAO.RutasDAO();
 
     public MenuVehiculos() {
         this.sc = new Scanner(System.in);
@@ -91,23 +92,42 @@ public class MenuVehiculos {
         String modelo = sc.nextLine().trim();
         System.out.println("ingrese el ID del conductor asignado: ");
         String idConductor = sc.nextLine().trim();
-        System.out.println("Ingrese la ciudad de origen:");
-        String origen = sc.nextLine().trim();
-        System.out.println("Ingrese la ciudad de destino:");
-        String destino = sc.nextLine().trim();
+
+        System.out.println("\n=== SELECCIONE UNA RUTA ===");
+        List<Model.Ruta> rutasDisponibles = rutasDAO.listarRutas();
+        
+        if (rutasDisponibles.isEmpty()) {
+            System.out.println("Error: No hay rutas registradas en el sistema. Debe registrar una ruta primero.");
+            return;
+        }
+
+        for (int i = 0; i < rutasDisponibles.size(); i++) {
+            System.out.println((i + 1) + ". " + rutasDisponibles.get(i).toString());
+        }
+        
+        System.out.print("Seleccione el numero de la ruta: ");
+        int rutaOpt = sc.nextInt();
+        sc.nextLine();
+
+        if (rutaOpt < 1 || rutaOpt > rutasDisponibles.size()) {
+            System.out.println("Selección invalida. Cancelando registro.");
+            return;
+        }
+
+        Model.Ruta rutaSeleccionada = rutasDisponibles.get(rutaOpt - 1);
 
         Vehiculo vehiculoNuevo = null;
 
         switch (tipOpt) {
             case 1:
-                vehiculoNuevo = new Bus(placa, modelo, true, idConductor, origen, destino);
+                vehiculoNuevo = new Bus(placa, modelo, true, idConductor, rutaSeleccionada);
                 break;
             case 2:
-                vehiculoNuevo = new Buseta(placa, modelo, true, idConductor, origen, destino);
+                vehiculoNuevo = new Buseta(placa, modelo, true, idConductor, rutaSeleccionada);
                 break;
             case 3:
-                vehiculoNuevo = new Microbus(placa, modelo, true, idConductor, origen, destino);
-            break;
+                vehiculoNuevo = new Microbus(placa, modelo, true, idConductor, rutaSeleccionada);
+                break;
         }
 
         String mensaje = vehiculoService.registarVehiculo(vehiculoNuevo);
@@ -125,18 +145,18 @@ public class MenuVehiculos {
             return;
         }
 
-        // Formato tipo tabla simple para mejor legibilidad en consola
+        
         System.out.printf("%-10s | %-10s | %-8s | %-12s | %-15s | %-10s\n", 
                         "TIPO", "PLACA", "MODELO", "CONDUCTOR", "RUTA (Ori-Des)", "ESTADO");
         System.out.println("====================================================================================");
         
         for (Vehiculo v : lista) {
-            String ruta = v.getOrigen() + " - " + v.getDestino();
-            String estadoStr = v.isActivo() ? "ACTIVO" : "ARCHIVADO";
-            
-            System.out.printf("%-10s | %-10s | %-8s | %-12s | %-15s | %-10s\n", 
-                    v.getTipoVehiculo(), v.getPlaca(), v.getModelo(), v.getIdConductor(), ruta, estadoStr);
-        }
+        String rutaTexto = v.getRutaAsignada().getCiudadOrigen() + " - " + v.getRutaAsignada().getCiudadDestino();
+        String estadoStr = v.isActivo() ? "ACTIVO" : "ARCHIVADO";
+        
+        System.out.printf("%-10s | %-10s | %-8s | %-12s | %-15s | %-10s\n", 
+                v.getTipoVehiculo(), v.getPlaca(), v.getModelo(), v.getIdConductor(), rutaTexto, estadoStr);
+    }
         System.out.println("====================================================================================");
         System.out.println("Total de vehiculos registrados: " + lista.size());
     }

@@ -4,6 +4,9 @@ import DAO.ConductorDao;
 import DAO.PasajeroDao;
 import Model.Conductor;
 import Model.Pasajero;
+import Model.PasajeroAdultoMayor;
+import Model.PasajeroEstudiante;
+import Model.PasajeroRegular;
 import java.util.List;
 
 public class PersonaService {
@@ -57,5 +60,26 @@ public class PersonaService {
 
     public List<Conductor> listarConductores() {
         return conductores;
+    }
+    
+    
+    public boolean registrarPasajero(String cedula, String nombre, String tipo) {
+        Pasajero nuevo;
+
+        switch (tipo) {
+            case "Estudiante"  -> nuevo = new PasajeroEstudiante(cedula, nombre);
+            case "AdultoMayor" -> nuevo = new PasajeroAdultoMayor(cedula, nombre);
+            case "Regular"     -> nuevo = new PasajeroRegular(cedula, nombre);
+            default -> {
+                System.out.println("[ERROR] Tipo de pasajero inválido: " + tipo
+                        + ". Use: Regular, Estudiante o AdultoMayor");
+                return false;
+            }
+        }
+
+        pasajeros.add(nuevo);
+        pasajeroDAO.guardar(nuevo);
+        System.out.println("[OK] Pasajero registrado: " + nombre + " (" + tipo + ")");
+        return true;
     }
 }

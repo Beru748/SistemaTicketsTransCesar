@@ -41,5 +41,16 @@ public class TicketService {
         ticket.imprimirDetalle();
         return true;
     }
+    
+    public void listarTickets() {
+        if (tickets.isEmpty()) {
+            System.out.println("No hay tickets registrados.");
+            return;
+        }
+        System.out.println("===== TODOS LOS TICKETS (" + tickets.size() + ") =====");
+        for (Ticket t : tickets) {
+            t.imprimirDetalle();
+        }
+    }
 
 }

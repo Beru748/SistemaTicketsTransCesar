@@ -12,7 +12,7 @@ public abstract class Vehiculo implements Imprimible,Calculable{
         this.placa = placa;
         this.modelo = modelo;
         this.capacidadMaxima = capacidadMaxima;
-        this.pasajerosActuales = 0;
+        this.pasajerosActuales = 0; 
         this.precioBaseTicket = precioBaseTicket;
         this.tipoVehiculo = tipoVehiculo;
         this.estado = estado;

@@ -86,49 +86,42 @@ private void registrarConductor() {
     }
 
     private void registrarPasajero() {
-        System.out.println("\n=== REGISTRAR PASAJERO ===");
-        System.out.print("Ingrese cédula: ");
+        System.out.println("\n=== REGISTRO DE PASAJERO ===");
+        System.out.print("Ingrese la cedula: ");
         String cedula = sc.nextLine().trim();
-        System.out.print("Ingrese nombre completo: ");
+
+        System.out.print("Ingrese el nombre: ");
         String nombre = sc.nextLine().trim();
 
-        // REQUERIMIENTO 1: Logica de validacion de edad y tipo de pasajero
-        System.out.print("¿El pasajero es estudiante activo? (S/N): ");
-        String esEstudiante = sc.nextLine().trim().toUpperCase();
+        System.out.print("Ingrese la fecha de nacimiento (DD/MM/AAAA): ");
+        String fechaStr = sc.nextLine().trim();
 
-        String tipoPasajero = "Regular";
+        try {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate fechaNacimiento = LocalDate.parse(fechaStr, formatter);
+        
+        // 2. Calcular la edad aquí mismo para decidir si mostrar el menú
+        int edad = Period.between(fechaNacimiento, LocalDate.now()).getYears();
+        String tipo = "Regular"; // Valor por defecto
 
-        if (esEstudiante.equals("S")) {
-            tipoPasajero = "Estudiante";
+        if (edad >= 60) {
+            System.out.println("[SISTEMA] Persona de " + edad + " años detectada. Clasificación automática: Adulto Mayor.");
+            tipo = "AdultoMayor";
         } else {
-            System.out.print("Ingrese la fecha de nacimiento (DD/MM/AAAA): ");
-            String fechaStr = sc.nextLine().trim();
-            
-            try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate fechaNacimiento = LocalDate.parse(fechaStr, formatter);
-                LocalDate fechaActual = LocalDate.now();
-                
-                int edad = Period.between(fechaNacimiento, fechaActual).getYears();
-                System.out.println("Edad calculada: " + edad + " años.");
-
-                if (edad >= 60) {
-                    tipoPasajero = "AdultoMayor";
-                    System.out.println("Se asignará automaticamente la categoría: Adulto Mayor.");
-                } else {
-                    System.out.println("Se asignara la categoria: Regular.");
-                }
-
-            } catch (DateTimeParseException e) {
-                System.out.println("Formato de fecha incorrecto. El registro ha sido cancelado.");
-                return; // Cortamos la ejecución si la fecha está mal
-            }
+            // 3. Solo preguntar el tipo si es menor de 60
+            System.out.println("Seleccione el tipo de pasajero:");
+            System.out.println("1. Regular");
+            System.out.println("2. Estudiante");
+            int opTipo = sc.nextInt(); sc.nextLine();
+            tipo = (opTipo == 2) ? "Estudiante" : "Regular";
         }
 
-        boolean exito = personaService.registrarPasajero(cedula, nombre, tipoPasajero);
-        if (!exito) {
-            System.out.println("Hubo un problema al registrar el pasajero.");
-        }
+        // 4. Llamar al servicio con los datos ya validados
+        personaService.registrarPasajero(cedula, nombre, fechaNacimiento, tipo);
+
+    } catch (DateTimeParseException e) {
+        System.out.println("[ERROR] Fecha inválida.");
+    }
     }
 
     private void listarPersonal() {

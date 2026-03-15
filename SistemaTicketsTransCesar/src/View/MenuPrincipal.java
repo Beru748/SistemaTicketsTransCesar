@@ -1,5 +1,9 @@
 package View;
 import java.util.Scanner;
+
+import DAO.VehiculosDAO;
+import Service.PersonaService;
+import Service.TicketService;
 import Util.MenuUtil;
 
 public class MenuPrincipal {
@@ -12,10 +16,13 @@ public class MenuPrincipal {
 
     public MenuPrincipal() {
         this.sc = new Scanner(System.in);
-        this.menuVehiculos = new MenuVehiculos();
-        this.menuPersonal = new MenuPersonal();
-        this.menuReportes = new MenuReportes();
-        this.menuVentas = new MenuVentas();
+        PersonaService personaService = new PersonaService();
+        VehiculosDAO vehiculosDAO = new VehiculosDAO();
+        TicketService ticketService = new TicketService(personaService.listarPasajeros(), vehiculosDAO.listarVehiculos());
+        this.menuVehiculos = new MenuVehiculos(); 
+        this.menuPersonal = new MenuPersonal(); 
+        this.menuReportes = new MenuReportes(ticketService);
+        this.menuVentas = new MenuVentas(ticketService, personaService, vehiculosDAO);
     }
 
     public void menuPrincipal(){

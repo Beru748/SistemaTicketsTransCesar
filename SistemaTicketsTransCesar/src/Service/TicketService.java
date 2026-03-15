@@ -33,7 +33,7 @@ public class TicketService {
     private static final int    MAX_TICKETS_DIA = 3;
 
     public TicketService(List<Pasajero> pasajeros, List<Vehiculo> vehiculos) {
-        this.ticketDAO = new TicketDao();
+        this.ticketDAO = new TicketDAO();
         this.tickets = ticketDAO.cargarTodos(pasajeros, vehiculos);
     }
 
@@ -52,7 +52,7 @@ public class TicketService {
                                  String origen, String destino) {
 
         // REGLA 1: verificar cupos disponibles
-        if (!vehiculo.tieneCuposDisponibles()) {
+        if (!vehiculo.tieneCupo()) {
             System.out.println("[ERROR] El vehículo " + vehiculo.getPlaca()
                     + " no tiene cupos disponibles. Venta cancelada.");
             return false;
@@ -68,7 +68,7 @@ public class TicketService {
         }
 
         // REGLA 3 (REQ 2): recargo del 20% en festivos
-        double tarifaFinal = vehiculo.getTarifaBase();
+        double tarifaFinal = vehiculo.getPrecioBaseTicket();
         if (esFestivo(LocalDate.now())) {
             tarifaFinal = tarifaFinal * (1 + RECARGO_FESTIVO);
             System.out.println("[INFO] Día festivo. Tarifa con recargo 20%: $"
@@ -79,7 +79,7 @@ public class TicketService {
         Ticket ticket = new Ticket(pasajero, vehiculo, origen, destino, tarifaFinal);
 
         // Registrar el pasajero en el vehículo
-        vehiculo.agregarPasajero();
+        vehiculo.ocuparAsiento();
 
         // Guardar en memoria y en archivo
         tickets.add(ticket);

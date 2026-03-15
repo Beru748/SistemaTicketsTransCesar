@@ -25,7 +25,7 @@ public class Ticket implements Imprimible, Calculable {
         this.origen      = origen;
         this.destino     = destino;
         this.fechaCompra = LocalDate.now();
-        this.valorFinal  = vehiculo.getTarifaBase() * (1 - pasajero.calcularDescuento());
+        this.valorFinal  = vehiculo.getPrecioBaseTicket() * (1 - pasajero.calcularDescuento());
         this.estado      = "PAGADO";
     }
  
@@ -78,8 +78,8 @@ public class Ticket implements Imprimible, Calculable {
     }
  
     @Override
-    public double calcularTotal() {
-    return valorFinal;
+    public void calcularTotal() {
+    System.out.println("Valor total del ticket: $" + valorFinal);
 }
  
     @Override
@@ -87,7 +87,7 @@ public class Ticket implements Imprimible, Calculable {
         System.out.println("========== TICKET ==========");
         System.out.println("Pasajero  : " + pasajero.getNombre() + " (C.C. " + pasajero.getCedula() + ")");
         System.out.println("Tipo      : " + pasajero.getTipoPasajero());
-        System.out.println("Vehículo  : " + vehiculo.getPlaca() + " - " + vehiculo.getRuta());
+        System.out.println("Vehículo  : " + vehiculo.getPlaca() + " - " + vehiculo.getRutaAsignada());
         System.out.println("Origen    : " + origen);
         System.out.println("Destino   : " + destino);
         System.out.println("Fecha     : " + fechaCompra.format(FORMATO_FECHA));

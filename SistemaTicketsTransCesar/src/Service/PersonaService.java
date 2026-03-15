@@ -1,7 +1,7 @@
 package Service;
 
-import DAO.ConductorDao;
-import DAO.PasajeroDao;
+import DAO.ConductorDAO;
+import DAO.PasajeroDAO;
 import Model.Conductor;
 import Model.Pasajero;
 import Model.PasajeroAdultoMayor;
@@ -12,14 +12,14 @@ import java.time.Period;      // ← nuevo
 import java.util.List;
 
 public class PersonaService {
-    private final ConductorDao conductorDAO;
-    private final PasajeroDao  pasajeroDAO;
+    private final ConductorDAO conductorDAO;
+    private final PasajeroDAO  pasajeroDAO;
     private List<Conductor> conductores;
     private List<Pasajero>  pasajeros;
     
     public PersonaService() {
-        this.conductorDAO = new ConductorDao();
-        this.pasajeroDAO  = new PasajeroDao();
+        this.conductorDAO = new ConductorDAO();
+        this.pasajeroDAO  = new PasajeroDAO();
         this.conductores  = conductorDAO.cargarTodos();
         this.pasajeros    = pasajeroDAO.cargarTodos();
     }

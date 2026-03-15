@@ -1,6 +1,6 @@
 package Service;
 
-import DAO.TicketDao;
+import DAO.TicketDAO;
 import Model.Pasajero;
 import Model.Ticket;
 import Model.Vehiculo;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;        
 
 public class TicketService {
-    private final TicketDao ticketDAO;
+    private final TicketDAO ticketDAO;
     private List<Ticket> tickets;
 
     // ← NUEVO REQ 2: festivos y constantes

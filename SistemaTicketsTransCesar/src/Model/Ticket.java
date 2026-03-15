@@ -1,43 +1,87 @@
 package Model;
-
+ 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
+ 
 public class Ticket implements Imprimible, Calculable {
-private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    
+ 
+    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+ 
     private Pasajero pasajero;
     private Vehiculo vehiculo;
     private LocalDate fechaCompra;
     private String origen;
     private String destino;
     private double valorFinal;
-
+    private String estado;
+ 
+    /**
+     * Constructor para venta nueva sin festivo.
+     * Usa la tarifa base del vehículo directamente.
+     */
     public Ticket(Pasajero pasajero, Vehiculo vehiculo, String origen, String destino) {
-        this.pasajero = pasajero;
-        this.vehiculo = vehiculo;
-        this.fechaCompra = fechaCompra;
-        this.origen = origen;
-        this.destino = destino;
-        this.valorFinal = valorFinal;
-    }
-
-    public Ticket(Pasajero pasajero, Vehiculo vehiculo, LocalDate fechaCompra, String origen, String destino, double valorFinal) {
-        this.pasajero = pasajero;
-        this.vehiculo = vehiculo;
+        this.pasajero    = pasajero;
+        this.vehiculo    = vehiculo;
+        this.origen      = origen;
+        this.destino     = destino;
         this.fechaCompra = LocalDate.now();
-        this.origen = origen;
-        this.destino = destino;
-        this.valorFinal = calcularTotal();
+        this.valorFinal  = vehiculo.getTarifaBase() * (1 - pasajero.calcularDescuento());
+        this.estado      = "PAGADO";
     }
-
-    
+ 
+    /**
+     * Constructor para venta con tarifa ajustada (por ejemplo en festivo).
+     * TicketService calcula la tarifa y la pasa aquí.
+     */
+    public Ticket(Pasajero pasajero, Vehiculo vehiculo, String origen,
+                  String destino, double tarifaAplicada) {
+        this.pasajero    = pasajero;
+        this.vehiculo    = vehiculo;
+        this.origen      = origen;
+        this.destino     = destino;
+        this.fechaCompra = LocalDate.now();
+        this.valorFinal  = tarifaAplicada * (1 - pasajero.calcularDescuento());
+        this.estado      = "PAGADO";
+    }
+ 
+    /**
+     * Constructor para cargar desde archivo tickets.txt.
+     */
+    public Ticket(Pasajero pasajero, Vehiculo vehiculo, LocalDate fechaCompra,
+                  String origen, String destino, double valorFinal, String estado) {
+        this.pasajero    = pasajero;
+        this.vehiculo    = vehiculo;
+        this.fechaCompra = fechaCompra;
+        this.origen      = origen;
+        this.destino     = destino;
+        this.valorFinal  = valorFinal;
+        this.estado      = estado;
+    }
+ 
+    /**
+     * Cambia el estado del ticket con validación.
+     * Estados válidos: PAGADO, CANCELADO, ANULADO, PENDIENTE
+     */
+    public boolean cambiarEstado(String nuevoEstado) {
+        if (this.estado.equals("ANULADO")) {
+            System.out.println("[ERROR] El ticket ya está ANULADO y no puede modificarse.");
+            return false;
+        }
+        if (!nuevoEstado.equals("PAGADO") && !nuevoEstado.equals("CANCELADO")
+                && !nuevoEstado.equals("ANULADO") && !nuevoEstado.equals("PENDIENTE")) {
+            System.out.println("[ERROR] Estado inválido. Use: PAGADO, CANCELADO, ANULADO o PENDIENTE.");
+            return false;
+        }
+        this.estado = nuevoEstado;
+        System.out.println("[OK] Estado actualizado a: " + nuevoEstado);
+        return true;
+    }
+ 
+    @Override
     public double calcularTotal() {
-        double tarifaBase = vehiculo.getTarifaBase();
-        double descuento  = pasajero.calcularDescuento();
-        return tarifaBase * (1 - descuento);
-    }
-    
+    return valorFinal;
+}
+ 
     @Override
     public void imprimirDetalle() {
         System.out.println("========== TICKET ==========");
@@ -49,9 +93,10 @@ private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPatte
         System.out.println("Fecha     : " + fechaCompra.format(FORMATO_FECHA));
         System.out.printf ("Descuento : %.0f%%%n", pasajero.calcularDescuento() * 100);
         System.out.printf ("Valor     : $%.0f%n", valorFinal);
+        System.out.println("Estado    : " + estado);
         System.out.println("============================");
     }
-    
+ 
     @Override
     public String toString() {
         return pasajero.getCedula() + ";"
@@ -61,31 +106,15 @@ private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPatte
              + fechaCompra.format(FORMATO_FECHA) + ";"
              + origen + ";"
              + destino + ";"
-             + String.format("%.0f", valorFinal);
+             + String.format("%.0f", valorFinal) + ";"
+             + estado;
     }
-
-    public Pasajero getPasajero() {
-        return pasajero;
-    }
-
-    public Vehiculo getVehiculo() {
-        return vehiculo;
-    }
-
-    public LocalDate getFechaCompra() {
-        return fechaCompra;
-    }
-
-    public String getOrigen() {
-        return origen;
-    }
-
-    public String getDestino() {
-        return destino;
-    }
-
-    public double getValorFinal() {
-        return valorFinal;
-    }
-
+ 
+    public Pasajero getPasajero()     { return pasajero; }
+    public Vehiculo getVehiculo()     { return vehiculo; }
+    public LocalDate getFechaCompra() { return fechaCompra; }
+    public String getOrigen()         { return origen; }
+    public String getDestino()        { return destino; }
+    public double getValorFinal()     { return valorFinal; }
+    public String getEstado()         { return estado; }
 }

@@ -9,9 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import Util.RutasArchivos;
 
 public class ConductorDAO {
-    private static final String RUTA_ARCHIVO = "Data/Conductores.txt";
+    private static final String RUTA_ARCHIVO = RutasArchivos.CONDUCTORES;
     
     public void guardar(Conductor conductor) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(RUTA_ARCHIVO, true))) {

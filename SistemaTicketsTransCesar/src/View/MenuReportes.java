@@ -2,7 +2,10 @@ package View;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Scanner;
+
+import Model.Ticket;
 import Service.TicketService;
 import Util.MenuUtil;
 
@@ -15,9 +18,9 @@ public class MenuReportes {
     private Scanner sc;
     private TicketService ticketService;
 
-    public MenuReportes() {
+    public MenuReportes(TicketService ticketService) {
         this.sc = new Scanner(System.in);
-        this.ticketService = TicketService();
+        this.ticketService = ticketService;
     }
 
     public void menuReportes(){
@@ -70,8 +73,8 @@ public class MenuReportes {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate fecha = LocalDate.parse(fechaStr, formatter);
             
-            // aqui llama al metodo que muestra el ticket por la fecha
-            ticketService.mostrarTicketsPorFecha(fecha);
+            List<Ticket> resultados = ticketService.getTicketsPorFecha(fecha);
+            imprimirResultados(resultados, "Fecha " + fechaStr);
             
         } catch (DateTimeParseException e) {
             System.out.println("Formato de fecha incorrecto. Use DD/MM/AAAA.");
@@ -79,12 +82,12 @@ public class MenuReportes {
     }
 
     private void consultarPorTipoVehiculo() {
-        System.out.println("\n=== TICKETS POR TIPO DE VEHICULO ==");
+        System.out.println("\n=== TICKETS POR TIPO DE VEHICULO ===");
         System.out.print("Ingrese el tipo (BUS, BUSETA, MICROBUS): ");
         String tipo = sc.nextLine().trim().toUpperCase();
         
-        // aqui llama al metodo que muestra el ticket por tipo de vehiculo
-        ticketService.mostrarTicketsPorTipoVehiculo(tipo);
+        List<Ticket> resultados = ticketService.getTicketsPorTipoVehiculo(tipo);
+        imprimirResultados(resultados, "Tipo de Vehiculo " + tipo);
     }
 
     private void consultarPorTipoPasajero() {
@@ -93,15 +96,25 @@ public class MenuReportes {
         System.out.print("Ingrese el tipo de pasajero: ");
         String tipo = sc.nextLine().trim();
         
-        //aqui llama al metodo que muestra el ticket por pasajero
-        ticketService.mostrarTicketsPorTipoPasajero(tipo);
+        List<Ticket> resultados = ticketService.getTicketsPorTipoPasajero(tipo);
+        imprimirResultados(resultados, "Tipo de Pasajero " + tipo);
     }
 
     private void verResumenDiaActual() {
         System.out.println("\n=== RESUMEN DEL DIA ACTUAL ===");
-        LocalDate hoy = LocalDate.now();
-        
-        // Llamada al metodo que muestre el resumen del dia
-        ticketService.mostrarResumenDia(hoy);
+        ticketService.mostrarResumenHoy();
+    }
+
+    private void imprimirResultados(List<Ticket> lista, String criterio) {
+        if (lista == null || lista.isEmpty()) {
+            System.out.println("No se encontraron tickets para el criterio: " + criterio);
+        } else {
+            System.out.println("Se encontraron " + lista.size() + " tickets:");
+            for (Ticket t : lista) {
+                System.out.println("===============================================");
+                t.imprimirDetalle(); 
+            }
+            System.out.println("===================================================");
+        }
     }
 }

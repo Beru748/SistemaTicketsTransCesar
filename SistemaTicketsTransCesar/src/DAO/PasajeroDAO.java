@@ -13,10 +13,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import Util.RutasArchivos;
  
 public class PasajeroDAO {
  
-    private static final String RUTA_ARCHIVO = "Data/pasajeros.txt";
+    private static final String RUTA_ARCHIVO = RutasArchivos.PASAJEROS;
  
     public void guardar(Pasajero pasajero) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(RUTA_ARCHIVO, true))) {

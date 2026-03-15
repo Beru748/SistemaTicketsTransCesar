@@ -14,7 +14,7 @@ public class MenuPrincipal {
         this.sc = new Scanner(System.in);
         this.menuVehiculos = new MenuVehiculos();
         this.menuPersonal = new MenuPersonal();
-        this.menuReportes = menuReportes();
+        this.menuReportes = new MenuReportes();
         this.menuVentas = new MenuVentas();
     }
 

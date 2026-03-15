@@ -7,19 +7,19 @@ import Model.Pasajero;
 import Model.PasajeroAdultoMayor;
 import Model.PasajeroEstudiante;
 import Model.PasajeroRegular;
+import java.time.LocalDate;   // ← nuevo
+import java.time.Period;      // ← nuevo
 import java.util.List;
 
 public class PersonaService {
     private final ConductorDao conductorDAO;
     private final PasajeroDao  pasajeroDAO;
-
     private List<Conductor> conductores;
     private List<Pasajero>  pasajeros;
     
     public PersonaService() {
         this.conductorDAO = new ConductorDao();
         this.pasajeroDAO  = new PasajeroDao();
-        // Carga automática al iniciar: sesiones anteriores disponibles desde el primer momento
         this.conductores  = conductorDAO.cargarTodos();
         this.pasajeros    = pasajeroDAO.cargarTodos();
     }
@@ -30,7 +30,6 @@ public class PersonaService {
             System.out.println("[ERROR] No se puede registrar un conductor sin número de licencia.");
             return false;
         }
-
         Conductor nuevo = new Conductor(cedula, nombre, numeroLicencia, categoria);
         conductores.add(nuevo);
         conductorDAO.guardar(nuevo);
@@ -62,24 +61,38 @@ public class PersonaService {
         return conductores;
     }
     
-    
-    public boolean registrarPasajero(String cedula, String nombre, String tipo) {
+    // ← MÉTODO ACTUALIZADO REQ 1: ahora recibe fechaNacimiento
+    // y determina automáticamente si es AdultoMayor
+    public boolean registrarPasajero(String cedula, String nombre,
+                                      LocalDate fechaNacimiento, String tipo) {
+        
+        if (buscarPasajeroPorCedula(cedula) != null) {
+    System.out.println("[ERROR] Ya existe un pasajero con esa cédula.");
+    return false;
+}
         Pasajero nuevo;
 
-        switch (tipo) {
-            case "Estudiante"  -> nuevo = new PasajeroEstudiante(cedula, nombre);
-            case "AdultoMayor" -> nuevo = new PasajeroAdultoMayor(cedula, nombre);
-            case "Regular"     -> nuevo = new PasajeroRegular(cedula, nombre);
-            default -> {
-                System.out.println("[ERROR] Tipo de pasajero inválido: " + tipo
-                        + ". Use: Regular, Estudiante o AdultoMayor");
-                return false;
+        // Si tiene 60 años o más el sistema lo clasifica automáticamente
+        if (Period.between(fechaNacimiento, LocalDate.now()).getYears() >= 60) {
+            nuevo = new PasajeroAdultoMayor(cedula, nombre, fechaNacimiento);
+            System.out.println("[INFO] Clasificado automáticamente como Adulto Mayor (30% descuento).");
+        } else {
+            switch (tipo) {
+                case "Estudiante" -> nuevo = new PasajeroEstudiante(cedula, nombre, fechaNacimiento);
+                case "Regular"    -> nuevo = new PasajeroRegular(cedula, nombre, fechaNacimiento);
+                default -> {
+                    System.out.println("[ERROR] Tipo inválido: " + tipo
+                            + ". Use: Regular o Estudiante.");
+                    return false;
+                }
             }
         }
 
         pasajeros.add(nuevo);
         pasajeroDAO.guardar(nuevo);
-        System.out.println("[OK] Pasajero registrado: " + nombre + " (" + tipo + ")");
+        System.out.println("[OK] Pasajero registrado: " + nombre
+                + " | Tipo: " + nuevo.getTipoPasajero()
+                + " | Edad: " + nuevo.getEdad() + " años");
         return true;
     }
     

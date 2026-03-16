@@ -140,5 +140,13 @@ public class VehiculosDAO {
             } catch (IOException e) {
                 System.out.println("Error al leer: " + e.getMessage());
             }  
+
+            try (PrintWriter pw = new PrintWriter(new FileWriter(ruta, false))) {
+            for (String lineaActualizada : lineasActualizadas) {
+                pw.println(lineaActualizada);
+            }
+        } catch (IOException e) {
+            System.out.println("Error al guardar los cambios de archivado: " + e.getMessage());
+        }
     }
 }

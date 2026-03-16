@@ -1,1 +1,4 @@
 1067595062;Erik Samir Ruiz Bastidas;AdultoMayor;1960-03-15
+1065830756;yiliney navarro;Regular;1993-01-22
+49776268;yumeidis jimenez;Estudiante;2001-12-02
+67890;keila;Estudiante;2006-12-02

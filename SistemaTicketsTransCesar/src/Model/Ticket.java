@@ -17,7 +17,6 @@ public class Ticket implements Imprimible, Calculable {
  
     /**
      * Constructor para venta nueva sin festivo.
-     * Usa la tarifa base del vehículo directamente.
      */
     public Ticket(Pasajero pasajero, Vehiculo vehiculo, String origen, String destino) {
         this.pasajero    = pasajero;
@@ -30,8 +29,7 @@ public class Ticket implements Imprimible, Calculable {
     }
  
     /**
-     * Constructor para venta con tarifa ajustada (por ejemplo en festivo).
-     * TicketService calcula la tarifa y la pasa aquí.
+     * Constructor para venta con tarifa ajustada (festivo).
      */
     public Ticket(Pasajero pasajero, Vehiculo vehiculo, String origen,
                   String destino, double tarifaAplicada) {
@@ -55,32 +53,36 @@ public class Ticket implements Imprimible, Calculable {
         this.origen      = origen;
         this.destino     = destino;
         this.valorFinal  = valorFinal;
-        this.estado      = estado;
+        this.estado      = estado.toUpperCase();
     }
  
-    /**
-     * Cambia el estado del ticket con validación.
-     * Estados válidos: PAGADO, CANCELADO, ANULADO, PENDIENTE
-     */
+    
     public boolean cambiarEstado(String nuevoEstado) {
-        if (this.estado.equals("ANULADO")) {
+        // BUG CORREGIDO: antes this.estado.equals("ANULADO") fallaba si el estado
+        // estaba guardado como "Anulado". Ahora usamos equalsIgnoreCase().
+        if (this.estado.equalsIgnoreCase("ANULADO")) {
             System.out.println("[ERROR] El ticket ya está ANULADO y no puede modificarse.");
             return false;
         }
-        if (!nuevoEstado.equals("PAGADO") && !nuevoEstado.equals("CANCELADO")
-                && !nuevoEstado.equals("ANULADO") && !nuevoEstado.equals("PENDIENTE")) {
+ 
+        String estadoNormalizado = nuevoEstado.toUpperCase();
+ 
+        if (!estadoNormalizado.equals("PAGADO") && !estadoNormalizado.equals("CANCELADO")
+                && !estadoNormalizado.equals("ANULADO") && !estadoNormalizado.equals("PENDIENTE")) {
             System.out.println("[ERROR] Estado inválido. Use: PAGADO, CANCELADO, ANULADO o PENDIENTE.");
             return false;
         }
-        this.estado = nuevoEstado;
-        System.out.println("[OK] Estado actualizado a: " + nuevoEstado);
+ 
+        // Guardamos siempre en mayúsculas para consistencia
+        this.estado = estadoNormalizado;
+        System.out.println("[OK] Estado actualizado a: " + this.estado);
         return true;
     }
  
     @Override
     public void calcularTotal() {
-    System.out.println("Valor total del ticket: $" + valorFinal);
-}
+        System.out.println("Valor total del ticket: $" + valorFinal);
+    }
  
     @Override
     public void imprimirDetalle() {

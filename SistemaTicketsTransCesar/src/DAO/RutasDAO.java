@@ -7,13 +7,36 @@ import java.util.List;
 import Model.Ruta;
 
 public class RutasDAO {
+
+public void guardarRuta(Ruta ruta) {
+        try (FileWriter fw = new FileWriter(RutasArchivos.RUTAS, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw)) {
+            
+            out.println(ruta.getCodigoRuta() + " | " + 
+                        ruta.getCiudadOrigen() + " | " + 
+                        ruta.getCiudadDestino() + " | " +
+                        ruta.getDistanciaKm() + " | " +
+                        ruta.getTiempoEstimadoMinutos() + " | ");
+            
+        } catch (IOException e) {
+            System.out.println("Error al guardar la ruta: " + e.getMessage());
+        }
+    }
+
     public List<Ruta> listarRutas() {
         List<Ruta> rutas = new ArrayList<>();
         File archivo = new File(RutasArchivos.RUTAS);
 
-        if (!archivo.exists()) {
-            rutas.add(new Ruta("R001", "Valledupar", "Barranquilla", 300, 240));
-            rutas.add(new Ruta("R002", "Valledupar", "Santa Marta", 230, 180));
+        if (!archivo.exists() || archivo.length() == 0) {
+            Ruta r1 = new Ruta("R001", "Valledupar", "Barranquilla", 30000, 240);
+            Ruta r2 = new Ruta("R002", "Valledupar", "Santa Marta", 25000, 180);
+            
+            guardarRuta(r1);
+            guardarRuta(r2);
+            
+            rutas.add(r1);
+            rutas.add(r2);
             return rutas;
         }
 

@@ -13,7 +13,7 @@ import Util.RutasArchivos;
 
 public class ConductorDAO {
     private static final String RUTA_ARCHIVO = RutasArchivos.CONDUCTORES;
-    
+ 
     public void guardar(Conductor conductor) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(RUTA_ARCHIVO, true))) {
             writer.write(conductor.toString());
@@ -22,22 +22,25 @@ public class ConductorDAO {
             System.out.println("[ERROR] No se pudo guardar el conductor: " + e.getMessage());
         }
     }
-    
+ 
     public List<Conductor> cargarTodos() {
         List<Conductor> lista = new ArrayList<>();
         File archivo = new File(RUTA_ARCHIVO);
-
+ 
         if (!archivo.exists()) {
             return lista;
         }
+ 
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             String linea;
             while ((linea = reader.readLine()) != null) {
                 linea = linea.trim();
                 if (!linea.isEmpty()) {
+                    
                     String[] campos = linea.split(";");
                     if (campos.length == 4) {
-                        Conductor c = new Conductor(campos[2], campos[3], campos[0], campos[1]);
+                        
+                        Conductor c = new Conductor(campos[0], campos[1], campos[2], campos[3]);
                         lista.add(c);
                     }
                 }
@@ -45,8 +48,7 @@ public class ConductorDAO {
         } catch (IOException e) {
             System.out.println("[ERROR] No se pudo leer conductores.txt: " + e.getMessage());
         }
-
+ 
         return lista;
-        
     }
 }

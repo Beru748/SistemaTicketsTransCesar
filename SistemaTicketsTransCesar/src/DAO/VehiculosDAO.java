@@ -119,7 +119,7 @@ public class VehiculosDAO {
     public void archivarVehiculo(String placa) {
         Vehiculo v = buscarPorPlaca(placa);
             if (v == null) {
-                System.out.println("Error: Vehículo no encontrado.");
+                System.out.println("Error: Vehiculo no encontrado.");
                 return;
             }
 
@@ -132,7 +132,7 @@ public class VehiculosDAO {
                     String[] datos = linea.split("\\s*\\|\\s*");
 
                     if (datos.length >= 9 && datos[2].equalsIgnoreCase(placa)) {
-                        datos[8] = "No disponible";
+                        datos[8] = "false";
                         linea = String.join(" | ", datos);
                     }
                     lineasActualizadas.add(linea);

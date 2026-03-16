@@ -1,12 +1,15 @@
 package View;
 import java.util.Scanner;
 import java.util.List;
+
+import Service.RutaService;
 import Service.VehiculoService;
 import Model.Bus;
 import Model.Buseta;
 import Model.Microbus;
 import Model.Vehiculo;
 import Util.MenuUtil;
+
 
 /*en esta clase se va a gestionar todos los tipos de vehiculos de la empresa.
 * dejo el menu para que vean mas o menos cuales son las opciones que van a tener y se hagan
@@ -15,11 +18,12 @@ import Util.MenuUtil;
 public class MenuVehiculos {
     private Scanner sc;
     private VehiculoService vehiculoService;
-    private DAO.RutasDAO rutasDAO = new DAO.RutasDAO();
+    private RutaService rutaService;
 
     public MenuVehiculos() {
         this.sc = new Scanner(System.in);
         this.vehiculoService = new VehiculoService();
+        this.rutaService = new RutaService();
     }
 
     public void menuVehiculos(){
@@ -32,8 +36,9 @@ public class MenuVehiculos {
             System.out.println("| |1. Registrar vehiculo.                        | |");
             System.out.println("| |2. Listado detallado.                         | |");
             System.out.println("| |3. Consultar disponibilidad.                  | |");
-            System.out.println("| |4. Archivar vehículo.                         | |");
-            System.out.println("| |5. Salir.                                     | |");
+            System.out.println("| |4. Archivar vehiculo.                         | |");
+            System.out.println("| |5. Registrar nueva ruta.                      | |");
+            System.out.println("| |6. Salir.                                     | |");
             System.out.println("====================================================");
             System.out.println("Escoga una opcion: ");
             opcion = sc.nextInt();
@@ -57,7 +62,11 @@ public class MenuVehiculos {
                         //Le pongo "Archivar como para que tenga un nombre diferente a "Eliminar"
                         archivarVehiculo();
                         break;
+
                     case 5:
+                        registrarNuevaRuta();
+                        break;
+                    case 6:
                         System.out.println("Saliendo de la gestion de vehiculos...");
                         MenuUtil.esperarEnter();
                         break;
@@ -66,13 +75,19 @@ public class MenuVehiculos {
                         System.out.println("Esa opcion es invalida. Intentalo de nuevo.");
                         break;
                 }
-        }while (opcion != 5);
+        }while (opcion != 6);
     }
 
     //Metodo para registrar un nuevo vehiculo
-
     private void registrarVehiculo(){
         System.out.println("\n=== REGISTRO DE NUEVO VEHICULO ===");
+        
+        if (!rutaService.hayRutasDisponibles()) {
+            System.out.println("Error: No hay rutas registradas en el sistema.");
+            System.out.println("El sistema ha cargado las rutas por defecto. Intente registrar nuevamente.");
+            return; 
+        }
+
         System.out.println("Seleccione el tipo de vehiculo:");
         System.out.println("1. Bus");
         System.out.println("2. Buseta");
@@ -81,43 +96,36 @@ public class MenuVehiculos {
         int tipOpt = sc.nextInt();
         sc.nextLine();
 
-        if(tipOpt < 1 || tipOpt >3){
-            System.out.println("Tipo de vehiculo invalido. Cancelando registro");
+        if(tipOpt < 1 || tipOpt > 3){
+            System.out.println("Tipo de vehiculo invalido. Cancelando registro.");
             return;
         }
 
-        System.out.println("Ingrese la placa: ");
+        System.out.print("Ingrese la placa: ");
         String placa = sc.nextLine().trim().toUpperCase();
-        System.out.println("Ingrese el modelo: ");
+        System.out.print("Ingrese el modelo (Año): ");
         String modelo = sc.nextLine().trim();
-        System.out.println("ingrese el ID del conductor asignado: ");
+        System.out.print("Ingrese el ID del conductor asignado: ");
         String idConductor = sc.nextLine().trim();
 
         System.out.println("\n=== SELECCIONE UNA RUTA ===");
-        List<Model.Ruta> rutasDisponibles = rutasDAO.listarRutas();
+        List<Model.Ruta> rutas = rutaService.obtenerTodasLasRutas();
         
-        if (rutasDisponibles.isEmpty()) {
-            System.out.println("Error: No hay rutas registradas en el sistema. Debe registrar una ruta primero.");
+        for (Model.Ruta r : rutas) {
+            System.out.println("[" + r.getCodigoRuta() + "] " + r.getCiudadOrigen() + " -> " + r.getCiudadDestino());
+        }
+
+        System.out.print("Ingrese el codigo exacto de la ruta (Ej. R001): ");
+        String codigo = sc.nextLine().trim();
+        
+        Model.Ruta rutaSeleccionada = rutaService.buscarPorCodigo(codigo);
+
+        if (rutaSeleccionada == null) {
+            System.out.println("Error: Codigo de ruta no valido o inexistente. Cancelando registro.");
             return;
         }
-
-        for (int i = 0; i < rutasDisponibles.size(); i++) {
-            System.out.println((i + 1) + ". " + rutasDisponibles.get(i).toString());
-        }
-        
-        System.out.print("Seleccione el numero de la ruta: ");
-        int rutaOpt = sc.nextInt();
-        sc.nextLine();
-
-        if (rutaOpt < 1 || rutaOpt > rutasDisponibles.size()) {
-            System.out.println("Selección invalida. Cancelando registro.");
-            return;
-        }
-
-        Model.Ruta rutaSeleccionada = rutasDisponibles.get(rutaOpt - 1);
 
         Vehiculo vehiculoNuevo = null;
-
         switch (tipOpt) {
             case 1:
                 vehiculoNuevo = new Bus(placa, modelo, true, idConductor, rutaSeleccionada);
@@ -189,6 +197,30 @@ public class MenuVehiculos {
         } else {
             System.out.println("Operacion cancelada.");
         }
+    }
+
+    // Metodo para capturar datos y registrar una ruta
+    private void registrarNuevaRuta() {
+        System.out.println("\n=== REGISTRAR NUEVA RUTA ===");
+        
+        System.out.print("Ingrese el codigo de la ruta: ");
+        String codigo = sc.nextLine().trim();
+        
+        System.out.print("Ingrese la ciudad de origen: ");
+        String origen = sc.nextLine().trim();
+        
+        System.out.print("Ingrese la ciudad de destino: ");
+        String destino = sc.nextLine().trim();
+        
+        System.out.print("Ingrese la distancia en kilometros: ");
+        double distancia = sc.nextDouble();
+        
+        System.out.print("Ingrese el tiempo estimado en minutos: ");
+        int tiempo = sc.nextInt();
+        sc.nextLine();
+        
+        String mensaje = rutaService.registrarRuta(codigo, origen, destino, distancia, tiempo);
+        System.out.println("\n" + mensaje);
     }
 
 }

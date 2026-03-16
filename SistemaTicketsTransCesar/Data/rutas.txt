@@ -1,0 +1,3 @@
+R001 | Valledupar | Barranquilla | 30000.0 | 240 | 
+R002 | Valledupar | Santa Marta | 25000.0 | 180 | 
+R003 | Valledupar | Bogota | 864.0 | 881 | 

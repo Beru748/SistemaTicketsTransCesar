@@ -7,8 +7,8 @@ import Model.Pasajero;
 import Model.PasajeroAdultoMayor;
 import Model.PasajeroEstudiante;
 import Model.PasajeroRegular;
-import java.time.LocalDate;   // ← nuevo
-import java.time.Period;      // ← nuevo
+import java.time.LocalDate;   
+import java.time.Period;  
 import java.util.List;
 
 public class PersonaService {

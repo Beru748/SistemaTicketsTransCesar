@@ -7,8 +7,8 @@ import Model.Pasajero;
 import Model.PasajeroAdultoMayor;
 import Model.PasajeroEstudiante;
 import Model.PasajeroRegular;
-import java.time.LocalDate;   // ← nuevo
-import java.time.Period;      // ← nuevo
+import java.time.LocalDate;   
+import java.time.Period;  
 import java.util.List;
 
 public class PersonaService {
@@ -51,11 +51,13 @@ public class PersonaService {
     }
     
     public Conductor buscarConductorPorCedula(String cedula) {
-        for (Conductor c : conductores) {
-            if (c.getCedula().equals(cedula)) return c;
+    for (Conductor c : conductores) {
+        if (c.getCedula().trim().equalsIgnoreCase(cedula.trim())) {
+            return c;
         }
-        return null;
     }
+    return null;
+}
 
     public List<Conductor> listarConductores() {
         return conductores;
@@ -97,11 +99,13 @@ public class PersonaService {
     }
     
     public Pasajero buscarPasajeroPorCedula(String cedula) {
-        for (Pasajero p : pasajeros) {
-            if (p.getCedula().equals(cedula)) return p;
+    for (Pasajero p : pasajeros) {
+        if (p.getCedula().trim().equalsIgnoreCase(cedula.trim())) {
+            return p;
         }
-        return null;
     }
+    return null;
+}
 
     public List<Pasajero> listarPasajeros() {
         return pasajeros;

@@ -58,8 +58,7 @@ public class Ticket implements Imprimible, Calculable {
  
     
     public boolean cambiarEstado(String nuevoEstado) {
-        // BUG CORREGIDO: antes this.estado.equals("ANULADO") fallaba si el estado
-        // estaba guardado como "Anulado". Ahora usamos equalsIgnoreCase().
+        
         if (this.estado.equalsIgnoreCase("ANULADO")) {
             System.out.println("[ERROR] El ticket ya está ANULADO y no puede modificarse.");
             return false;

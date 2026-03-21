@@ -21,7 +21,7 @@ private final ReservaDAO    reservaDAO;
                           TicketService ticketService) {
         this.reservaDAO    = new ReservaDAO();
         this.ticketService = ticketService;
-        this.reservas      = reservaDAO.cargarTodas(pasajeros, vehiculos);
+        this.reservas      = reservaDAO.cargarTodos(pasajeros, vehiculos);
  
         // Al arrancar verifica vencidas automáticamente sin mostrar mensajes
         verificarVencidasSilencioso();

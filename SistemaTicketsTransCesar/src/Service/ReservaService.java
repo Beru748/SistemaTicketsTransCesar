@@ -58,6 +58,25 @@ private final ReservaDAO    reservaDAO;
         System.out.println(nueva.toString());
         return true;
     }
+
+    // ─────────────────────── CANCELAR ───────────────────────
+ 
+    public boolean cancelarReserva(String codigo) {
+        Reserva r = buscarPorCodigo(codigo);
+        if (r == null) {
+            System.out.println("[ERROR] No existe una reserva con codigo: " + codigo);
+            return false;
+        }
+        if (r.getEstado() != EstadoReserva.ACTIVA) {
+            System.out.println("[ERROR] La reserva " + codigo
+                    + " ya esta " + r.getEstado() + " y no puede cancelarse.");
+            return false;
+        }
+        r.setEstado(EstadoReserva.CANCELADA);
+        reservaDAO.guardarTodas(reservas);
+        System.out.println("[OK] Reserva " + codigo + " cancelada. El cupo queda libre.");
+        return true;
+    }
  
     
 }

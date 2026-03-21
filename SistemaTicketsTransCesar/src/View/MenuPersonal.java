@@ -18,9 +18,9 @@ public class MenuPersonal {
     private Scanner sc;
     private PersonaService personaService;
 
-    public MenuPersonal() {
+     public MenuPersonal(PersonaService personaService) {
         this.sc = new Scanner(System.in);
-        this.personaService = new PersonaService();
+        this.personaService = personaService;
     }
 
     public void menuPersonal(){

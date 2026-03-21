@@ -65,6 +65,22 @@ public class Reserva {
     public void setFechaViaje(LocalDate FechaViaje){
         this.FechaViaje=FechaViaje;
     }
+
+    public enum EstadoReserva{
+        ACTIVA,
+        CONVERTIDA,
+        CANCELADA
+    }
+
+    @Override
+    public String toString() {
+        return Codigo + ";" +
+                Pasajero.getCedula() + ";" +
+                Vehiculo.getPlaca() + ";" +
+                FechaCreacion + ";" +
+                FechaViaje + ";" +
+                Estado;
+    }
 }
 
 

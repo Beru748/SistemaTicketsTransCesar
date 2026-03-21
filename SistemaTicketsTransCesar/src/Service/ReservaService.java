@@ -90,7 +90,7 @@ private final ReservaDAO    reservaDAO;
 
     // ─────────────────────── HISTORIAL POR PASAJERO ───────────────────────
  
-    public List<Reserva> listarHistorialReservas(String cedula) {
+    public List<Reserva> historialPorPasajero(String cedula) {
         List<Reserva> historial = new ArrayList<>();
         for (Reserva r : reservas) {
             if (r.getPasajero().getCedula().equalsIgnoreCase(cedula)) historial.add(r);

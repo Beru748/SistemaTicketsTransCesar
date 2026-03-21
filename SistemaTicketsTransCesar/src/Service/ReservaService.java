@@ -77,6 +77,16 @@ private final ReservaDAO    reservaDAO;
         System.out.println("[OK] Reserva " + codigo + " cancelada. El cupo queda libre.");
         return true;
     }
+
+    // ─────────────────────── LISTAR ACTIVAS ───────────────────────
+ 
+    public List<Reserva> listarReservasActivas() {
+        List<Reserva> activas = new ArrayList<>();
+        for (Reserva r : reservas) {
+            if (r.getEstado() == EstadoReserva.ACTIVA) activas.add(r);
+        }
+        return activas;
+    }
  
     
 }

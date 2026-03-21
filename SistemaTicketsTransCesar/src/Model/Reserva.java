@@ -18,7 +18,7 @@ public class Reserva {
         this.Vehiculo = Vehiculo;
         this.FechaCreacion = FechaCreacion;
         this.FechaViaje = FechaViaje;
-        this.Estado = EstadoReserva.ACTIVA;
+        this.Estado = Estado;
     }
 
     public boolean EstaVencida(){

@@ -227,6 +227,11 @@ public class MenuReservas {
     //Metodo del CASE 6 para mostrar las reservas que estan vencidas
 
     private void verificarReservasVencidas(){
+        System.out.println("\n=== AUDITORIA DE RESERVAS VENCIDAS ===");
+        System.out.println("Buscando reservas que superen las 24 horas...");
         
+        reservaService.verificarReservasVencidas();
+        
+        MenuUtil.esperarEnter();
     }
 }

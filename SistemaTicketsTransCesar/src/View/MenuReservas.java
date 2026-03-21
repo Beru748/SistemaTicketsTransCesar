@@ -131,7 +131,7 @@ public class MenuReservas {
             /*boolean exito = reservaService.cancelarReserva();
             if(!exito){
                 System.out.println("Hubo un problema el cancerlar la reserva.");}*/
-            System.out.println("Reserva " + codigo + " cancelada.");
+            System.out.println("Reserva [" + codigo + "] cancelada.");
         }else{
             System.out.println("Abortando operacion.");
         }
@@ -154,7 +154,21 @@ public class MenuReservas {
     //Metodo del CASE 4 para listar las reservas pero por cada pasajero
 
     private void listarReservasPasajero(){
+        System.out.println("\n=== LISTADO DE RESERVAS POR PASAJERO ===");
+        System.out.print("Ingreese la cedula del pasajero: ");
+        String cedula = sc.nextLine().trim();
 
+        if (cedula.isEmpty()) {
+            System.out.println("El campo de la cedula no puede estar vacio.");
+            return;
+        }
+
+        /*List<Reservas> histrorial = reservaService.historialPorPasajero();
+        if (histrorial.isEmpty){System.out.println("Este pasajero no tiene un historial de reservas. Lista vacia.");
+            return;}*/
+
+        System.out.println("Mostrando la Historial de reservas de la persona con la cedula [" + cedula+"]");
+        MenuUtil.esperarEnter();
     }
 
     //Metodo del CASE 5 para convertir la reserva a un ticket y asi completar la compra

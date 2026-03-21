@@ -75,6 +75,8 @@ public class MenuReservas {
         } while (opcion != 7);
     }
 
+    //Aqui el metodo del CASE 1 para crear un anueva reserva
+
     private void crearReserva(){
         System.out.println("\n=== CREACION DE RESERVAS ===");
         System.out.print("Ingrese la cedula del pasajero: ");
@@ -108,21 +110,54 @@ public class MenuReservas {
             MenuUtil.esperarEnter();
     }
 
+    //Metodo del CASE 2 para cancelar las reservas
     private void cancelarReserva(){
+        String codigo = "";
+        System.out.println("\n=== CANCELACION DE LA RESERVA ===");
 
+        while (codigo.isEmpty()) {
+            System.out.print("Ingrese el codigo de la reserva a cancerlar: ");
+            codigo = sc.nextLine().trim().toUpperCase();
+
+            if (codigo.isEmpty()) {
+                System.out.println("Si el campo esta vacio no se puede completar la cancelacion.");
+            }
+        }
+
+        System.out.print("Esta seguro que desea cancelar la reserva " + codigo +"? (S/N): ");
+            String confirmacion = sc.nextLine().trim().toUpperCase();
+
+        if (confirmacion.equals("S")) {
+            /*boolean exito = reservaService.cancelarReserva();
+            if(!exito){
+                System.out.println("Hubo un problema el cancerlar la reserva.");}*/
+            System.out.println("Reserva " + codigo + " cancelada.");
+        }else{
+            System.out.println("Abortando operacion.");
+        }
+
+        MenuUtil.esperarEnter();
     }
+
+    //Metodo del CASE 3 para listar todas las reservas
 
     private void listarReservas(){
 
     }
 
+    //Metodo del CASE 4 para listar las reservas pero por cada pasajero
+
     private void listarReservasPasajero(){
 
     }
 
+    //Metodo del CASE 5 para convertir la reserva a un ticket y asi completar la compra
+
     private void convertirReserva(){
 
     }
+
+    //Metodo del CASE 6 para mostrar las reservas que estan vencidas
 
     private void verificarReservasVencidas(){
 

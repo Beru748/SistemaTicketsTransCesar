@@ -48,7 +48,7 @@ private final ReservaDAO    reservaDAO;
             return false;
         }
  
-        // El estado que se pasa al constructor es ignorado (la clase siempre pone ACTIVA)
+        
         Reserva nueva = new Reserva(generarCodigo(), pasajero, vehiculo,
                                     LocalDateTime.now(), fechaViaje, EstadoReserva.ACTIVA);
         reservas.add(nueva);
@@ -124,6 +124,33 @@ private final ReservaDAO    reservaDAO;
             System.out.println("[OK] Reserva " + codigo + " convertida en ticket exitosamente.");
         }
         return vendido;
+    }
+
+    // ─────────────────────── VERIFICAR VENCIDAS ───────────────────────
+ 
+    
+    public int verificarReservasVencidas() {
+        int canceladas = 0;
+        for (Reserva r : reservas) {
+            
+            if (r.getEstado() == EstadoReserva.ACTIVA && r.EstaVencida()) {
+                r.setEstado(EstadoReserva.CANCELADA);
+                canceladas++;
+            }
+        }
+        if (canceladas > 0) reservaDAO.guardarTodas(reservas);
+        System.out.println("[INFO] Verificacion completada. Reservas canceladas: " + canceladas);
+        return canceladas;
+    }
+ 
+    
+    private void verificarVencidasSilencioso() {
+        for (Reserva r : reservas) {
+            if (r.getEstado() == EstadoReserva.ACTIVA && r.EstaVencida()) {
+                r.setEstado(EstadoReserva.CANCELADA);
+            }
+        }
+        reservaDAO.guardarTodas(reservas);
     }
  
     

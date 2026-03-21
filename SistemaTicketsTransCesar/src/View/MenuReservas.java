@@ -1,9 +1,16 @@
 package View;
 
 import Util.MenuUtil;
-import java.util.Scanner;
+
 import java.util.List;
-//import Service.ReservaService;
+import java.util.Scanner;
+
+import Service.ReservaService;
+import Service.PersonaService;
+import DAO.VehiculosDAO;
+import Model.Pasajero;
+import Model.Vehiculo;
+import Model.Reserva;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -12,11 +19,15 @@ import java.time.format.DateTimeParseException;
 
 public class MenuReservas {
     private Scanner sc;
-    //private ReservaService reservaService;
+    private ReservaService reservaService;
+    private PersonaService personaService;
+    private VehiculosDAO vehiculosDAO;
 
-    public MenuReservas() {
+    public MenuReservas(ReservaService reservaService, PersonaService personaService, VehiculosDAO vehiculosDAO) {
         this.sc = new Scanner(System.in);
-        //this.reservaService =new ReservaService();
+        this.reservaService = reservaService;
+        this.personaService = personaService;
+        this.vehiculosDAO = vehiculosDAO;
     }
 
     private void menuReservas(){
@@ -41,7 +52,7 @@ public class MenuReservas {
             switch (opcion) {
                 case 1:
                     //Crear una reserva
-                    crearReserva();
+                    crearReservas();
                     break;
                 case 2:
                     //Cancelar las reservas
@@ -77,40 +88,56 @@ public class MenuReservas {
 
     //Aqui el metodo del CASE 1 para crear un anueva reserva
 
-    private void crearReserva(){
+    private void crearReservas(){
         System.out.println("\n=== CREACION DE RESERVAS ===");
+
         System.out.print("Ingrese la cedula del pasajero: ");
         String cedula = sc.nextLine().trim();
+        Pasajero pasajero = personaService.buscarPasajeroPorCedula(cedula);
+        if (pasajero == null) {
+            System.out.println("Error: Pasajero no encontrado. Registrelo primero en el modulo de Personal.");
+            return;
+        }
+
         System.out.print("Ingrese la placa del vehiculo: ");
-        String placa = sc.nextLine().trim();
+        String placa = sc.nextLine().trim().toUpperCase();
+        Vehiculo vehiculo = vehiculosDAO.buscarPorPlaca(placa);
+        if (vehiculo == null) {
+            System.out.println("Error: Vehiculo no encontrado en el sistema.");
+            return;
+        }
 
+        LocalDate fechaViajeDate = null;
         boolean fechaValida = false;
-        System.out.print("Ingrese la Fecha del viaje (DD/MM/AAAA): ");
-        String fechaViaje = sc.nextLine().trim();
+        
+        while (!fechaValida) {
+            System.out.print("Ingrese la Fecha del viaje (DD/MM/AAAA): ");
+            String fechaViaje = sc.nextLine().trim();
 
-        try {
+            try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate fechaIngresada = LocalDate.parse(fechaViaje, formatter);
+                fechaViajeDate = LocalDate.parse(fechaViaje, formatter);
                 
-                if (fechaIngresada.isBefore(LocalDate.now())) {
+                if (fechaViajeDate.isBefore(LocalDate.now())) {
                     System.out.println("Error: No puedes reservar para una fecha en el pasado.");
                 } else {
-                    fechaValida = true;//aqui se valida la fecha del viaje, osea que si todo sale bien sale del ciclo
+                    fechaValida = true;
                 }
             } catch (DateTimeParseException e) {
                 System.out.println("Formato de fecha incorrecto. Use exactamente DD/MM/AAAA.");
             }
+        }
 
-            /*boolean exito = reservaService.crearReserva(cedula,placa,fechaViaje);
-            if(!exito){
-                System.out.println("Hubo un problema al crear la reserva.");
-            }*/
+        boolean exito = reservaService.crearReserva(pasajero, vehiculo, fechaViajeDate);
 
-            System.out.println("Dato capturados correctamente. Conectando con el Servicio...");
-            MenuUtil.esperarEnter();
+        if (!exito) {
+            System.out.println("Hubo un problema al crear la reserva.");
+        }
+        MenuUtil.esperarEnter();
     }
 
     //Metodo del CASE 2 para cancelar las reservas
+
     private void cancelarReserva(){
         String codigo = "";
         System.out.println("\n=== CANCELACION DE LA RESERVA ===");
@@ -128,9 +155,9 @@ public class MenuReservas {
             String confirmacion = sc.nextLine().trim().toUpperCase();
 
         if (confirmacion.equals("S")) {
-            /*boolean exito = reservaService.cancelarReserva();
+            boolean exito = reservaService.cancelarReserva(codigo);
             if(!exito){
-                System.out.println("Hubo un problema el cancerlar la reserva.");}*/
+                System.out.println("Hubo un problema el cancerlar la reserva.");}
             System.out.println("Reserva [" + codigo + "] cancelada.");
         }else{
             System.out.println("Abortando operacion.");
@@ -143,9 +170,14 @@ public class MenuReservas {
 
     private void listarReservas(){
         System.out.println("\n=== LISTADO DE LAS RESERVAS ===");
-        /*List<Reservas> reservas = reservaService.listarReservasActivas();
-        if (reservas.isEmpty){System.out.println("No hay reservas activas. Lista vacia.");
-            return;}*/
+        List<Reserva> activas = reservaService.listarReservasActivas();
+        if (activas.isEmpty()){
+            System.out.println("No hay reservas activas. Lista vacia.");
+        }else{
+            for (Reserva r : activas) {
+                System.out.println(r.toString());
+            }
+        }
 
         System.out.println("Mostrando la Lista de las reservas activas.");
         MenuUtil.esperarEnter();
@@ -163,9 +195,14 @@ public class MenuReservas {
             return;
         }
 
-        /*List<Reservas> histrorial = reservaService.historialPorPasajero();
-        if (histrorial.isEmpty){System.out.println("Este pasajero no tiene un historial de reservas. Lista vacia.");
-            return;}*/
+        List<Reserva> histrorial = reservaService.historialPorPasajero(cedula);
+        if (histrorial.isEmpty()){
+            System.out.println("Este pasajero no tiene un historial de reservas. Lista vacia.");
+        }else{
+            for (Reserva r : histrorial) {
+                System.out.println(r.toString());
+            }
+        }
 
         System.out.println("Mostrando la Historial de reservas de la persona con la cedula [" + cedula+"]");
         MenuUtil.esperarEnter();

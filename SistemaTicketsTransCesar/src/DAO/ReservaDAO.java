@@ -47,4 +47,61 @@ public class ReservaDAO {
             System.out.println("[ERROR] No se pudo actualizar reservas: " + e.getMessage());
         }
     }
+
+    public List<Reserva> CargarTodos(List<Pasajero> Pasajeros, List<Vehiculo> Vehiculos){
+
+        List<Reserva> Lista = new ArrayList<>();
+        File archivo = new File(RutasArchivos.RESERVAS);
+
+        if(!archivo.exists()) return Lista;
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(archivo))){
+
+            String Linea;
+
+            while((Linea = reader.readLine()) != null){
+
+                Linea = Linea.trim();
+
+                if(!Linea.isEmpty()){
+
+                    String[] campos = Linea.split(";");
+
+                    if(campos.length == 6){
+
+                        String Codigo = campos[0];
+                        String CedulaPasajero = campos[1];
+                        String PlacaVehiculo = campos[2];
+                        LocalDateTime FechaCreacion = LocalDateTime.parse(campos[3]);
+                        LocalDate FechaViaje = LocalDate.parse(campos[4]);
+                        EstadoReserva Estado = EstadoReserva.valueOf(campos[5]);
+
+                        Pasajero pasajero = personaService.buscarPasajeroPorCedula(Pasajeros, CedulaPasajero);
+                        Vehiculo vehiculo = vehiculoService.buscarVehiculoPorPlaca(Vehiculos, PlacaVehiculo);
+
+                        if(pasajero != null && vehiculo != null){
+
+                            Reserva r = new Reserva(
+                                    Codigo,
+                                    pasajero,
+                                    vehiculo,
+                                    FechaCreacion,
+                                    FechaViaje,
+                                    Estado
+                            );
+
+                            Lista.add(r);
+                        }
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("[ERROR] No se pudo leer reservas: " + e.getMessage());
+        }
+
+        return Lista;
+    }
+
+
 }

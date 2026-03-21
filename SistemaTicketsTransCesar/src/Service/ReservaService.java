@@ -21,7 +21,7 @@ private final ReservaDAO    reservaDAO;
                           TicketService ticketService) {
         this.reservaDAO    = new ReservaDAO();
         this.ticketService = ticketService;
-        this.reservas      = reservaDAO.cargarTodos(pasajeros, vehiculos);
+        this.reservas      = reservaDAO.cargarTodos();
  
         // Al arrancar verifica vencidas automáticamente sin mostrar mensajes
         verificarVencidasSilencioso();
@@ -73,7 +73,7 @@ private final ReservaDAO    reservaDAO;
             return false;
         }
         r.setEstado(EstadoReserva.CANCELADA);
-        reservaDAO.guardarTodas(reservas);
+        reservaDAO.sobrescribir(reservas);
         System.out.println("[OK] Reserva " + codigo + " cancelada. El cupo queda libre.");
         return true;
     }
@@ -120,7 +120,7 @@ private final ReservaDAO    reservaDAO;
  
         if (vendido) {
             r.setEstado(EstadoReserva.CONVERTIDA);
-            reservaDAO.guardarTodas(reservas);
+            reservaDAO.sobrescribir(reservas);
             System.out.println("[OK] Reserva " + codigo + " convertida en ticket exitosamente.");
         }
         return vendido;
@@ -138,7 +138,7 @@ private final ReservaDAO    reservaDAO;
                 canceladas++;
             }
         }
-        if (canceladas > 0) reservaDAO.guardarTodas(reservas);
+        if (canceladas > 0) reservaDAO.sobrescribir(reservas);
         System.out.println("[INFO] Verificacion completada. Reservas canceladas: " + canceladas);
         return canceladas;
     }
@@ -150,7 +150,7 @@ private final ReservaDAO    reservaDAO;
                 r.setEstado(EstadoReserva.CANCELADA);
             }
         }
-        reservaDAO.guardarTodas(reservas);
+        reservaDAO.sobrescribir(reservas);
     }
 
     // ─────────────────────── BUSCAR ───────────────────────

@@ -97,6 +97,34 @@ private final ReservaDAO    reservaDAO;
         }
         return historial;
     }
+
+    // ─────────────────────── CONVERTIR EN TICKET ───────────────────────
+ 
+    public boolean convertirEnTicket(String codigo) {
+        Reserva r = buscarPorCodigo(codigo);
+        if (r == null) {
+            System.out.println("[ERROR] No existe una reserva con codigo: " + codigo);
+            return false;
+        }
+        if (r.getEstado() != EstadoReserva.ACTIVA) {
+            System.out.println("[ERROR] Solo se pueden convertir reservas ACTIVAS. "
+                    + "Estado actual: " + r.getEstado());
+            return false;
+        }
+ 
+        String origen  = r.getVehiculo().getRutaAsignada().getCiudadOrigen();
+        String destino = r.getVehiculo().getRutaAsignada().getCiudadDestino();
+ 
+        boolean vendido = ticketService.venderTicket(
+                r.getPasajero(), r.getVehiculo(), origen, destino);
+ 
+        if (vendido) {
+            r.setEstado(EstadoReserva.CONVERTIDA);
+            reservaDAO.guardarTodas(reservas);
+            System.out.println("[OK] Reserva " + codigo + " convertida en ticket exitosamente.");
+        }
+        return vendido;
+    }
  
     
 }

@@ -66,10 +66,19 @@ public class Reserva {
         this.FechaViaje=FechaViaje;
     }
 
+
     public enum EstadoReserva{
         ACTIVA,
         CONVERTIDA,
         CANCELADA
+    }
+
+    public EstadoReserva getEstado(){
+        return Estado;
+    }
+
+    public void setEstado(EstadoReserva Estado){
+        this.Estado=Estado;
     }
 
     @Override

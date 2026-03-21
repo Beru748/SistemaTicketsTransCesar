@@ -139,27 +139,21 @@ public class MenuReservas {
     //Metodo del CASE 2 para cancelar las reservas
 
     private void cancelarReserva(){
-        String codigo = "";
         System.out.println("\n=== CANCELACION DE LA RESERVA ===");
 
-        while (codigo.isEmpty()) {
             System.out.print("Ingrese el codigo de la reserva a cancerlar: ");
-            codigo = sc.nextLine().trim().toUpperCase();
+            String codigo = sc.nextLine().trim().toUpperCase();
 
             if (codigo.isEmpty()) {
                 System.out.println("Si el campo esta vacio no se puede completar la cancelacion.");
             }
-        }
 
         System.out.print("Esta seguro que desea cancelar la reserva " + codigo +"? (S/N): ");
             String confirmacion = sc.nextLine().trim().toUpperCase();
 
         if (confirmacion.equals("S")) {
-            boolean exito = reservaService.cancelarReserva(codigo);
-            if(!exito){
-                System.out.println("Hubo un problema el cancerlar la reserva.");}
-            System.out.println("Reserva [" + codigo + "] cancelada.");
-        }else{
+            reservaService.cancelarReserva(codigo); 
+        } else {
             System.out.println("Abortando operacion.");
         }
 
@@ -211,12 +205,28 @@ public class MenuReservas {
     //Metodo del CASE 5 para convertir la reserva a un ticket y asi completar la compra
 
     private void convertirReserva(){
+        System.out.println("\n=== CONVERTIR RESERVA A TICKET ===");
+        System.out.print("Ingrese el codigo del ticket: ");
+        String codigo = sc.nextLine().trim().toUpperCase();
 
+        if (codigo.isEmpty()) {
+            System.out.println("Si el campo esta vacio no se puede completar la cancelacion.");
+        }
+
+        System.out.print("Confirmar el pago y la conversion del ticket? (S/N): ");
+        String confirmar = sc.nextLine().trim().toUpperCase();
+
+        if (confirmar.equals("S")) {
+            reservaService.convertirEnTicket(codigo);
+        }else{
+            System.out.println("Operacion cancelada.");
+        }
+        MenuUtil.esperarEnter();
     }
 
     //Metodo del CASE 6 para mostrar las reservas que estan vencidas
 
     private void verificarReservasVencidas(){
-
+        
     }
 }

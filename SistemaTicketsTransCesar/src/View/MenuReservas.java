@@ -142,7 +142,13 @@ public class MenuReservas {
     //Metodo del CASE 3 para listar todas las reservas
 
     private void listarReservas(){
+        System.out.println("\n=== LISTADO DE LAS RESERVAS ===");
+        /*List<Reservas> reservas = reservaService.listarReservasActivas();
+        if (reservas.isEmpty){System.out.println("No hay reservas activas. Lista vacia.");
+            return;}*/
 
+        System.out.println("Mostrando la Lista de las reservas activas.");
+        MenuUtil.esperarEnter();
     }
 
     //Metodo del CASE 4 para listar las reservas pero por cada pasajero

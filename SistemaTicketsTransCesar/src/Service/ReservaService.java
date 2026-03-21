@@ -152,6 +152,15 @@ private final ReservaDAO    reservaDAO;
         }
         reservaDAO.guardarTodas(reservas);
     }
+
+    // ─────────────────────── BUSCAR ───────────────────────
+ 
+    public Reserva buscarPorCodigo(String codigo) {
+        for (Reserva r : reservas) {
+            if (r.getCodigo().equalsIgnoreCase(codigo)) return r;
+        }
+        return null;
+    }
  
     
 }

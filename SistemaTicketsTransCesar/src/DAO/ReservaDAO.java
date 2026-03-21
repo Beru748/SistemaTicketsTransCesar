@@ -33,4 +33,18 @@ public class ReservaDAO {
             System.out.println("[ERROR] No se pudo guardar la reserva: " + e.getMessage());
         }
     }
+
+    public void sobrescribir(List<Reserva> reservas) {
+        try (BufferedWriter writer = new BufferedWriter(
+                new FileWriter(RutasArchivos.RESERVAS))) {
+
+            for (Reserva r : reservas) {
+                writer.write(r.toString());
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+            System.out.println("[ERROR] No se pudo actualizar reservas: " + e.getMessage());
+        }
+    }
 }

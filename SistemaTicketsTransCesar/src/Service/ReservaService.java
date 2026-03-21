@@ -187,5 +187,7 @@ private final ReservaDAO    reservaDAO;
         return false;
     }
  
-    
+    private String generarCodigo() {
+        return "RES-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
+    }
 }

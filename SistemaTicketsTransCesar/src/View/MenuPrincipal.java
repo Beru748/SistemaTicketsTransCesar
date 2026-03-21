@@ -4,6 +4,7 @@ import java.util.Scanner;
 import DAO.VehiculosDAO;
 import Service.PersonaService;
 import Service.TicketService;
+import Service.ReservaService;
 import Util.MenuUtil;
 
 public class MenuPrincipal {
@@ -12,17 +13,22 @@ public class MenuPrincipal {
     private MenuPersonal menuPersonal;
     private MenuReportes menuReportes;
     private MenuVentas menuVentas;
-
+    private MenuReservas menuReservas;
 
     public MenuPrincipal() {
         this.sc = new Scanner(System.in);
+        
         PersonaService personaService = new PersonaService();
         VehiculosDAO vehiculosDAO = new VehiculosDAO();
         TicketService ticketService = new TicketService(personaService.listarPasajeros(), vehiculosDAO.listarVehiculos());
+        
         this.menuVehiculos = new MenuVehiculos(); 
         this.menuPersonal = new MenuPersonal(); 
         this.menuReportes = new MenuReportes(ticketService);
         this.menuVentas = new MenuVentas(ticketService, personaService, vehiculosDAO);
+        
+        ReservaService reservaService = new ReservaService(personaService.listarPasajeros(), vehiculosDAO.listarVehiculos(), ticketService);
+        this.menuReservas = new MenuReservas(reservaService, personaService, vehiculosDAO);
     }
 
     public void menuPrincipal(){
@@ -36,7 +42,8 @@ public class MenuPrincipal {
             System.out.println("| |2. Gestion de personal.                       | |");
             System.out.println("| |3. Operaciones de ventas.                     | |");
             System.out.println("| |4. Reportes y estadisticas.                   | |");
-            System.out.println("| |5. Salir.                                     | |");
+            System.out.println("| |5. Reservas de viaje.                         | |");
+            System.out.println("| |6. Salir.                                     | |");
             System.out.println("====================================================");
             System.out.println("Escoga una opcion: ");
             opcion = sc.nextInt();
@@ -60,7 +67,11 @@ public class MenuPrincipal {
                         menuReportes.menuReportes();
                         break;
                     case 5:
-                        System.out.println("Saliendo del menu...");
+                        //Reservas de los viajes
+                        menuReservas.menuReservas();
+                        break;
+                    case 6:
+                        System.out.println("Guardando los cambios y saliendo del menu...");
                         MenuUtil.esperarEnter();
                         break;
                 
@@ -68,6 +79,6 @@ public class MenuPrincipal {
                         System.out.println("Esa opcion es invalida. Intentalo de nuevo.");
                         break;
             }
-        } while (opcion != 5);
+        } while (opcion != 6);
     }
 }

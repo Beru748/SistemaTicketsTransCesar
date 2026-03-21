@@ -30,7 +30,7 @@ public class MenuReservas {
         this.vehiculosDAO = vehiculosDAO;
     }
 
-    private void menuReservas(){
+    public void menuReservas(){
         int opcion;
 
     do {

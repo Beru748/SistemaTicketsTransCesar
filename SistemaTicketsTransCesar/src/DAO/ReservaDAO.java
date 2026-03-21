@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import Util.RutasArchivos;
+
 public class ReservaDAO {
 
     private PersonaService personaService = new PersonaService();
@@ -48,7 +49,7 @@ public class ReservaDAO {
         }
     }
 
-    public List<Reserva> CargarTodos(List<Pasajero> Pasajeros, List<Vehiculo> Vehiculos){
+    public List<Reserva> cargarTodos(){
 
         List<Reserva> Lista = new ArrayList<>();
         File archivo = new File(RutasArchivos.RESERVAS);
@@ -76,8 +77,8 @@ public class ReservaDAO {
                         LocalDate FechaViaje = LocalDate.parse(campos[4]);
                         EstadoReserva Estado = EstadoReserva.valueOf(campos[5]);
 
-                        Pasajero pasajero = personaService.buscarPasajeroPorCedula(Pasajeros, CedulaPasajero);
-                        Vehiculo vehiculo = vehiculoService.buscarVehiculoPorPlaca(Vehiculos, PlacaVehiculo);
+                        Pasajero pasajero = personaService.buscarPasajeroPorCedula(CedulaPasajero);
+                        Vehiculo vehiculo = vehiculoService.buscarVehiculoPorPlaca(PlacaVehiculo);
 
                         if(pasajero != null && vehiculo != null){
 

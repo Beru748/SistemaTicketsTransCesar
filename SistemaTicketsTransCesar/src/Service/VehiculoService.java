@@ -63,4 +63,8 @@ public class VehiculoService {
         vehiculosDAO.archivarVehiculo(placa);
         return "El vehiculo con la placa: " + placa + " ha sido ARCHIVADO EXITOSAMENTE." ;
     }
+
+    public Vehiculo buscarVehiculoPorPlaca(String placa) {
+        return vehiculosDAO.buscarPorPlaca(placa);
+    }
 }

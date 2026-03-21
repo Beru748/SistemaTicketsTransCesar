@@ -87,6 +87,16 @@ private final ReservaDAO    reservaDAO;
         }
         return activas;
     }
+
+    // ─────────────────────── HISTORIAL POR PASAJERO ───────────────────────
+ 
+    public List<Reserva> listarHistorialReservas(String cedula) {
+        List<Reserva> historial = new ArrayList<>();
+        for (Reserva r : reservas) {
+            if (r.getPasajero().getCedula().equalsIgnoreCase(cedula)) historial.add(r);
+        }
+        return historial;
+    }
  
     
 }

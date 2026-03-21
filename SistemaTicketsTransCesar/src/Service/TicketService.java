@@ -35,6 +35,9 @@ public class TicketService {
     public TicketService(List<Pasajero> pasajeros, List<Vehiculo> vehiculos) {
         this.ticketDAO = new TicketDAO();
         this.tickets = ticketDAO.cargarTodos(pasajeros, vehiculos);
+        for (Ticket t : tickets) { if (t.getEstado().equalsIgnoreCase("PAGADO")) {
+            t.getVehiculo().ocuparAsiento(); }
+        }
     }
 
     // ─────────────────────── VENTA ───────────────────────
@@ -111,15 +114,18 @@ public class TicketService {
     // ─────────────────────── GESTIÓN DE ESTADOS ───────────────────────
 
     // ← NUEVO: cambia estado de un ticket
-    public boolean cambiarEstadoTicket(String cedulaPasajero, LocalDate fecha,
-                                        String nuevoEstado) {
+    public boolean cambiarEstadoTicket(String cedulaPasajero, LocalDate fecha, String nuevoEstado) {
         Ticket ticket = buscarTicket(cedulaPasajero, fecha);
         if (ticket == null) {
-            System.out.println("[ERROR] No se encontró ticket para cédula "
-                    + cedulaPasajero + " en fecha " + fecha + ".");
+            System.out.println("[ERROR] No se encontró ticket para cédula " + cedulaPasajero +
+                    " en fecha " + fecha + ".");
             return false;
         }
-        return ticket.cambiarEstado(nuevoEstado);
+        boolean cambiado = ticket.cambiarEstado(nuevoEstado);
+        if (cambiado) {
+            ticketDAO.guardarTodos(tickets);
+        }
+        return cambiado;
     }
 
     // ← NUEVO: consulta estado de un ticket

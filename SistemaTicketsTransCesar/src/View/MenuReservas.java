@@ -76,7 +76,36 @@ public class MenuReservas {
     }
 
     private void crearReserva(){
+        System.out.println("\n=== CREACION DE RESERVAS ===");
+        System.out.print("Ingrese la cedula del pasajero: ");
+        String cedula = sc.nextLine().trim();
+        System.out.print("Ingrese la placa del vehiculo: ");
+        String placa = sc.nextLine().trim();
 
+        boolean fechaValida = false;
+        System.out.print("Ingrese la Fecha del viaje (DD/MM/AAAA): ");
+        String fechaViaje = sc.nextLine().trim();
+
+        try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate fechaIngresada = LocalDate.parse(fechaViaje, formatter);
+                
+                if (fechaIngresada.isBefore(LocalDate.now())) {
+                    System.out.println("Error: No puedes reservar para una fecha en el pasado.");
+                } else {
+                    fechaValida = true;//aqui se valida la fecha del viaje, osea que si todo sale bien sale del ciclo
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato de fecha incorrecto. Use exactamente DD/MM/AAAA.");
+            }
+
+            /*boolean exito = reservaService.crearReserva(cedula,placa,fechaViaje);
+            if(!exito){
+                System.out.println("Hubo un problema al crear la reserva.");
+            }*/
+
+            System.out.println("Dato capturados correctamente. Conectando con el Servicio...");
+            MenuUtil.esperarEnter();
     }
 
     private void cancelarReserva(){

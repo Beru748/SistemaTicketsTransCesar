@@ -161,6 +161,31 @@ private final ReservaDAO    reservaDAO;
         }
         return null;
     }
+
+    private int contarReservasActivasPorVehiculo(String placa) {
+        int count = 0;
+        for (Reserva r : reservas) {
+            if (r.getEstado() == EstadoReserva.ACTIVA
+                    && r.getVehiculo().getPlaca().equalsIgnoreCase(placa)) {
+                count++;
+            }
+        }
+        return count;
+    }
+ 
+    private boolean tieneReservaActivaParaVehiculoYFecha(String cedula,
+                                                          String placa,
+                                                          LocalDate fechaViaje) {
+        for (Reserva r : reservas) {
+            if (r.getEstado() == EstadoReserva.ACTIVA
+                    && r.getPasajero().getCedula().equalsIgnoreCase(cedula)
+                    && r.getVehiculo().getPlaca().equalsIgnoreCase(placa)
+                    && r.getFechaViaje().equals(fechaViaje)) {
+                return true;
+            }
+        }
+        return false;
+    }
  
     
 }

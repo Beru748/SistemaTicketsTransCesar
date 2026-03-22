@@ -1,1 +1,2 @@
 1067595062;Erik Samir Ruiz Bastidas;AdultoMayor;BAC-321;2026-03-16;Valledupar;Santa Marta;3150;PAGADO
+123;felix;Estudiante;BAC-321;2026-03-21;Valledupar;Santa Marta;3825;PAGADO

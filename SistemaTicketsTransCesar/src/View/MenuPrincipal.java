@@ -22,8 +22,8 @@ public class MenuPrincipal {
         VehiculosDAO vehiculosDAO = new VehiculosDAO();
         TicketService ticketService = new TicketService(personaService.listarPasajeros(), vehiculosDAO.listarVehiculos());
         
-        this.menuVehiculos = new MenuVehiculos(); 
-        this.menuPersonal = new MenuPersonal(); 
+        this.menuVehiculos = new MenuVehiculos();
+        this.menuPersonal = new MenuPersonal(personaService);
         this.menuReportes = new MenuReportes(ticketService);
         this.menuVentas = new MenuVentas(ticketService, personaService, vehiculosDAO);
         
